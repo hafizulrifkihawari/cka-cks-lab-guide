@@ -1,6 +1,8 @@
 /* sidebar-tree.js — turns flat sidebar nav-items into expand/collapse trees
    for quick navigation, wherever a nav-item's target section has multiple
    top-level subsections (h2 for study-guide domains, h3 for lab steps).
+   Only the coarsest heading level in a section is listed — nested sub-steps
+   (e.g. h3 under an h2 domain section) are left out of the submenu.
 
    Opt-in per group: only `.sb-group[data-tree]` gets scanned, so unrelated
    sidebar groups (Start Here, Reference, ...) are left exactly as they are.
@@ -18,12 +20,16 @@
   }
 
   function directHeadings(section) {
-    var out = [];
+    var all = [];
     for (var i = 0; i < section.children.length; i++) {
       var el = section.children[i];
-      if (el.tagName === 'H2' || el.tagName === 'H3') out.push(el);
+      if (el.tagName === 'H2' || el.tagName === 'H3') all.push(el);
     }
-    return out;
+    // Only the coarsest level present becomes the submenu — e.g. a domain
+    // section's H2 subsections (1., 2., 3. ...), not the H3 sub-steps
+    // nested under each one (3.1, 3.2 ...).
+    var topLevel = all.some(function (h) { return h.tagName === 'H2'; }) ? 'H2' : 'H3';
+    return all.filter(function (h) { return h.tagName === topLevel; });
   }
 
   function buildSubmenu(navItem) {

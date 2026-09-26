@@ -4,15 +4,54 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CKS Study Handbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>(function(){try{var t=localStorage.getItem('ckx-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <style>
 :root {
   --sb:#0f172a;--sb-text:#94a3b8;--bg:#f8fafc;--white:#fff;--code-bg:#0d1117;
   --border:#e2e8f0;--text:#1e293b;--muted:#64748b;
   --blue:#3b82f6;--green:#22c55e;--yellow:#f59e0b;--red:#ef4444;--purple:#a855f7;--orange:#f97316;
+  --code-inline-bg:#f1f5f9;--table-head-bg:#f8fafc;--table-hover-bg:#f9fafb;
+  --cal-tip-bg:#f0fdf4;--cal-tip-text:#14532d;
+  --cal-warn-bg:#fffbeb;--cal-warn-text:#78350f;
+  --cal-info-bg:#eff6ff;--cal-info-text:#1e3a8a;
+  --cal-danger-bg:#fef2f2;--cal-danger-text:#7f1d1d;
+  --cal-exam-bg:#fdf4ff;--cal-exam-text:#4a044e;
+  --cal-concept-bg:#eef2ff;--cal-concept-text:#312e81;
+  --cal-sec-bg:#fff7ed;--cal-sec-text:#7c2d12;
+  --tag-b-bg:#dbeafe;--tag-b-text:#1d4ed8;
+  --tag-g-bg:#dcfce7;--tag-g-text:#15803d;
+  --tag-y-bg:#fef9c3;--tag-y-text:#854d0e;
+  --tag-r-bg:#fee2e2;--tag-r-text:#991b1b;
+  --tag-p-bg:#f3e8ff;--tag-p-text:#6b21a8;
+  --tag-o-bg:#fff7ed;--tag-o-text:#9a3412;
+  --pcase-hover-bg:#faf5ff;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:#0b1220;--white:#111827;
+  --border:#253045;--text:#e2e8f0;--muted:#94a3b8;
+  --code-inline-bg:rgba(255,255,255,.08);--table-head-bg:rgba(255,255,255,.03);--table-hover-bg:rgba(255,255,255,.04);
+  --cal-tip-bg:rgba(34,197,94,.12);--cal-tip-text:#86efac;
+  --cal-warn-bg:rgba(245,158,11,.12);--cal-warn-text:#fcd34d;
+  --cal-info-bg:rgba(59,130,246,.14);--cal-info-text:#93c5fd;
+  --cal-danger-bg:rgba(239,68,68,.12);--cal-danger-text:#fca5a5;
+  --cal-exam-bg:rgba(168,85,247,.14);--cal-exam-text:#d8b4fe;
+  --cal-concept-bg:rgba(99,102,241,.14);--cal-concept-text:#a5b4fc;
+  --cal-sec-bg:rgba(249,115,22,.14);--cal-sec-text:#fdba74;
+  --tag-b-bg:rgba(59,130,246,.18);--tag-b-text:#93c5fd;
+  --tag-g-bg:rgba(34,197,94,.18);--tag-g-text:#86efac;
+  --tag-y-bg:rgba(245,158,11,.18);--tag-y-text:#fcd34d;
+  --tag-r-bg:rgba(239,68,68,.18);--tag-r-text:#fca5a5;
+  --tag-p-bg:rgba(168,85,247,.18);--tag-p-text:#d8b4fe;
+  --tag-o-bg:rgba(249,115,22,.18);--tag-o-text:#fdba74;
+  --pcase-hover-bg:rgba(168,85,247,.10);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;display:flex;background:var(--bg);color:var(--text);}
-#sidebar{width:272px;min-height:100vh;background:var(--sb);position:fixed;top:0;left:0;overflow-y:auto;z-index:100;}
+body{font-family:'Lexend',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;display:flex;background:var(--bg);color:var(--text);}
+#sidebar{width:272px;height:100vh;background:var(--sb);position:fixed;top:0;left:0;overflow-y:auto;z-index:100;}
 #sidebar::-webkit-scrollbar{width:4px;}
 #sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px;}
 .sb-header{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.07);}
@@ -39,46 +78,48 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .nav-subitem:hover{background:rgba(255,255,255,.04);color:#fff;}
 #main{margin-left:272px;flex:1;}
 .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:12px 44px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:50;}
+.theme-toggle{margin-left:auto;width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;color:var(--text);}
+.theme-toggle:hover{background:var(--border);}
 .topbar-label{font-size:12px;color:var(--muted);}
 .topbar-title{font-size:13px;font-weight:600;color:var(--text);}
 .section{display:none;max-width:860px;margin:0 auto;padding:40px 44px 80px;}
 .section.active{display:block;}
-.section h1{font-size:30px;font-weight:800;color:#0f172a;margin-bottom:6px;letter-spacing:-.5px;}
+.section h1{font-size:30px;font-weight:800;color:var(--text);margin-bottom:6px;letter-spacing:-.5px;}
 .lead{font-size:15.5px;color:var(--muted);line-height:1.65;margin-bottom:28px;}
-.section h2{font-size:20px;font-weight:700;color:#0f172a;margin:36px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--border);}
-.section h3{font-size:16px;font-weight:600;color:#0f172a;margin:22px 0 8px;}
+.section h2{font-size:20px;font-weight:700;color:var(--text);margin:36px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--border);}
+.section h3{font-size:16px;font-weight:600;color:var(--text);margin:22px 0 8px;}
 .section h4{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:18px 0 8px;}
 .section p{line-height:1.72;margin-bottom:12px;}
 .section ul,.section ol{margin-left:22px;margin-bottom:12px;line-height:1.8;}
 .section li{margin-bottom:3px;}
 a{color:var(--blue);text-decoration:none;}
 a:hover{text-decoration:underline;}
-code{background:#f1f5f9;color:#0f172a;padding:2px 6px;border-radius:4px;font-family:'SF Mono','Cascadia Code',monospace;font-size:12.5px;}
+code{background:var(--code-inline-bg);color:var(--text);padding:2px 6px;border-radius:4px;font-family:'SF Mono','Cascadia Code',monospace;font-size:12.5px;}
 pre{background:var(--code-bg);border-radius:10px;padding:18px 20px;overflow-x:auto;margin:14px 0;border:1px solid rgba(255,255,255,.08);position:relative;}
 pre code{color:#e2e8f0;font-family:'SF Mono','Cascadia Code','Fira Code',monospace;font-size:13px;line-height:1.7;background:none;padding:0;}
 .lang{position:absolute;top:10px;right:14px;font-size:10px;color:rgba(255,255,255,.25);font-family:monospace;text-transform:uppercase;letter-spacing:.5px;}
 .c{color:#6b7280;}.k{color:#60a5fa;}.v{color:#4ade80;}.n{color:#fbbf24;}.t{color:#c084fc;}
 .callout{padding:14px 18px;border-radius:8px;margin:14px 0;border-left:4px solid;font-size:14px;line-height:1.65;}
 .callout-title{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
-.tip{background:#f0fdf4;border-color:#22c55e;color:#14532d;}
-.warn{background:#fffbeb;border-color:#f59e0b;color:#78350f;}
-.info{background:#eff6ff;border-color:#3b82f6;color:#1e3a8a;}
-.danger{background:#fef2f2;border-color:#ef4444;color:#7f1d1d;}
-.exam{background:#fdf4ff;border-color:#a855f7;color:#4a044e;}
-.sec-callout{background:#fff7ed;border-color:#f97316;color:#7c2d12;}
+.tip{background:var(--cal-tip-bg);border-color:#22c55e;color:var(--cal-tip-text);}
+.warn{background:var(--cal-warn-bg);border-color:#f59e0b;color:var(--cal-warn-text);}
+.info{background:var(--cal-info-bg);border-color:#3b82f6;color:var(--cal-info-text);}
+.danger{background:var(--cal-danger-bg);border-color:#ef4444;color:var(--cal-danger-text);}
+.exam{background:var(--cal-exam-bg);border-color:#a855f7;color:var(--cal-exam-text);}
+.sec-callout{background:var(--cal-sec-bg);border-color:#f97316;color:var(--cal-sec-text);}
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin:16px 0;}
 .card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;}
 .card-num{font-size:26px;font-weight:800;margin-bottom:3px;}
 .card-label{font-size:13px;color:var(--muted);line-height:1.4;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
 table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
-th{background:#f8fafc;padding:9px 13px;text-align:left;font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border-bottom:2px solid var(--border);}
+th{background:var(--table-head-bg);padding:9px 13px;text-align:left;font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border-bottom:2px solid var(--border);}
 td{padding:9px 13px;border-bottom:1px solid var(--border);vertical-align:top;}
-tr:hover td{background:#f9fafb;}
+tr:hover td{background:var(--table-hover-bg);}
 .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11.5px;font-weight:500;margin:2px;}
-.tb{background:#dbeafe;color:#1d4ed8;}.tg{background:#dcfce7;color:#15803d;}
-.ty{background:#fef9c3;color:#854d0e;}.tr{background:#fee2e2;color:#991b1b;}
-.tp{background:#f3e8ff;color:#6b21a8;}.to{background:#fff7ed;color:#9a3412;}
+.tb{background:var(--tag-b-bg);color:var(--tag-b-text);}.tg{background:var(--tag-g-bg);color:var(--tag-g-text);}
+.ty{background:var(--tag-y-bg);color:var(--tag-y-text);}.tr{background:var(--tag-r-bg);color:var(--tag-r-text);}
+.tp{background:var(--tag-p-bg);color:var(--tag-p-text);}.to{background:var(--tag-o-bg);color:var(--tag-o-text);}
 .timeline{display:flex;flex-direction:column;gap:0;margin:16px 0;}
 .tl-item{display:flex;gap:18px;position:relative;}
 .tl-item::before{content:'';position:absolute;left:18px;top:38px;bottom:0;width:2px;background:var(--border);}
@@ -93,13 +134,13 @@ tr:hover td{background:#f9fafb;}
 .tool-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:600;background:#0f172a;color:#e2e8f0;margin:2px;}
 
 /* CONCEPT CALLOUT ("Understand This") */
-.concept { background:#eef2ff; border-color:#6366f1; color:#312e81; }
+.concept { background:var(--cal-concept-bg); border-color:#6366f1; color:var(--cal-concept-text); }
 
 /* DIAGRAMS (inline SVG) */
 figure.diagram { margin:20px 0; padding:20px 18px 12px; background:var(--white); border:1px solid var(--border); border-radius:12px; overflow-x:auto; }
 figure.diagram svg { display:block; width:100%; height:auto; margin:0 auto; }
 figure.diagram figcaption { margin-top:12px; font-size:12.5px; color:var(--muted); text-align:center; font-style:italic; }
-.diagram svg text { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; }
+.diagram svg text { font-family:'Lexend',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; }
 .dg-box { fill:var(--white); stroke:var(--border); stroke-width:1.5; }
 .dg-lbl { fill:var(--text); font-size:12px; font-weight:600; }
 .dg-sub { fill:var(--muted); font-size:10.5px; }
@@ -119,7 +160,7 @@ details.pcase > summary { padding:13px 18px; cursor:pointer; font-size:14px; fon
 details.pcase > summary::-webkit-details-marker { display:none; }
 details.pcase > summary::before { content:'▶'; font-size:10px; color:var(--purple); transition:transform .15s; }
 details.pcase[open] > summary::before { transform:rotate(90deg); }
-details.pcase > summary:hover { background:#faf5ff; }
+details.pcase > summary:hover { background:var(--pcase-hover-bg); }
 .pcase-body { padding:2px 18px 14px; border-top:1px solid var(--border); }
 .pcase-body p:first-child { margin-top:12px; }
 
@@ -133,14 +174,14 @@ details.pcase > summary:hover { background:#faf5ff; }
 .quiz-progress { font-size:13px; color:var(--muted); }
 .quiz-card { border:1px solid var(--border); border-radius:12px; padding:24px; background:var(--white); min-height:180px; display:flex; flex-direction:column; gap:16px; }
 .quiz-cat { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--purple); }
-.quiz-q { font-size:17px; font-weight:600; line-height:1.5; color:#0f172a; }
+.quiz-q { font-size:17px; font-weight:600; line-height:1.5; color:var(--text); }
 .quiz-a { font-size:14px; line-height:1.7; color:var(--text); border-top:1px dashed var(--border); padding-top:14px; }
 .quiz-a code { font-size:12.5px; }
 .quiz-a.hidden { display:none; }
 .quiz-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:auto; }
 .quiz-known { padding:2px 10px; border-radius:99px; font-size:11px; font-weight:600; }
-.quiz-known.k { background:#dcfce7; color:#15803d; }
-.quiz-known.r { background:#fee2e2; color:#991b1b; }
+.quiz-known.k { background:var(--tag-g-bg); color:var(--tag-g-text); }
+.quiz-known.r { background:var(--tag-r-bg); color:var(--tag-r-text); }
 
 /* SIDEBAR RESET */
 .sb-footer { padding:14px 18px 22px; border-top:1px solid rgba(255,255,255,.07); margin-top:8px; }
@@ -206,6 +247,7 @@ details.pcase > summary:hover { background:#faf5ff; }
     <span class="topbar-label">CKS Study Guide</span>
     <span class="topbar-label">/</span>
     <span class="topbar-title" id="topbar-title">Overview &amp; Exam Info</span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">🌙</button>
   </div>
 
   <!-- OVERVIEW -->
@@ -269,35 +311,35 @@ details.pcase > summary:hover { background:#faf5ff; }
 
     <div class="timeline">
       <div class="tl-item">
-        <div class="tl-dot" style="background:#fee2e2;color:#991b1b">1</div>
+        <div class="tl-dot" style="background:var(--tag-r-bg);color:var(--tag-r-text)">1</div>
         <div class="tl-body">
           <h3>Phase 1 — Security Fundamentals <span class="tag tr">3–4 days</span></h3>
           <p>Linux security model (DAC, MAC, capabilities), container security model, attack vectors in K8s (the 4Cs: Cloud, Cluster, Container, Code). Read the <a href="https://kubernetes.io/docs/concepts/security/overview/" target="_blank">K8s security overview</a>.</p>
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot" style="background:#fef9c3;color:#854d0e">2</div>
+        <div class="tl-dot" style="background:var(--tag-y-bg);color:var(--tag-y-text)">2</div>
         <div class="tl-body">
           <h3>Phase 2 — Cluster Hardening &amp; Setup <span class="tag ty">1 week</span></h3>
           <p>API server security flags, RBAC hardening, ServiceAccount token restrictions, CIS benchmark with kube-bench, etcd encryption at rest, TLS everywhere.</p>
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot" style="background:#f3e8ff;color:#6b21a8">3</div>
+        <div class="tl-dot" style="background:var(--tag-p-bg);color:var(--tag-p-text)">3</div>
         <div class="tl-body">
           <h3>Phase 3 — System &amp; Pod Hardening <span class="tag tp">1 week</span></h3>
           <p>SecurityContext deep dive, Pod Security Admission, AppArmor profiles, seccomp profiles, container sandboxes (gVisor/Kata). Practice applying security contexts to existing pods.</p>
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot" style="background:#dbeafe;color:#1d4ed8">4</div>
+        <div class="tl-dot" style="background:var(--tag-b-bg);color:var(--tag-b-text)">4</div>
         <div class="tl-body">
           <h3>Phase 4 — Supply Chain &amp; Admission <span class="tag tb">1 week</span></h3>
           <p>Trivy image scanning, OPA/Gatekeeper policies, ImagePolicyWebhook, admission controllers, Dockerfile hardening, image signing concepts.</p>
         </div>
       </div>
       <div class="tl-item">
-        <div class="tl-dot" style="background:#dcfce7;color:#15803d">5</div>
+        <div class="tl-dot" style="background:var(--tag-g-bg);color:var(--tag-g-text)">5</div>
         <div class="tl-body">
           <h3>Phase 5 — Runtime Security &amp; Observability <span class="tag tg">1 week</span></h3>
           <p>Falco rules and alerts, Kubernetes audit policies, detecting runtime threats, behavioral analysis, immutable containers.</p>
@@ -1535,6 +1577,7 @@ tail -f /var/log/kubernetes/audit.log</code></pre>
 <script src="ask-claude.js"></script>
 <script src="progress-view.js"></script>
 <script src="sidebar-tree.js"></script>
+<script src="theme-toggle.js"></script>
 <script>
 const GUIDE = 'cks';   // localStorage namespace
 const titles = {

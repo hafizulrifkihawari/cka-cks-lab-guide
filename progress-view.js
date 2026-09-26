@@ -307,19 +307,19 @@
       '.pv-ring-num{width:80px;height:80px;border-radius:50%;background:var(--white);display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;}' +
       '.pv-ring-num small{font-size:12px;font-weight:700;color:var(--muted);margin-left:1px;}' +
       '.pv-hero-body{flex:1;min-width:240px;}' +
-      '.pv-hero-big{font-size:21px;font-weight:800;color:#0f172a;letter-spacing:-.3px;font-variant-numeric:tabular-nums;}' +
+      '.pv-hero-big{font-size:21px;font-weight:800;color:var(--text);letter-spacing:-.3px;font-variant-numeric:tabular-nums;}' +
       '.pv-hero-sub{font-size:13.5px;color:var(--muted);line-height:1.6;margin:5px 0 12px;}' +
       '.pv-stats{display:flex;gap:8px;flex-wrap:wrap;}' +
       '.pv-stat{font-size:12px;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:4px 11px;}' +
       '.pv-stat b{color:var(--text);font-weight:700;}' +
-      '.pv-stat.pv-warn{background:#fffbeb;border-color:#fde68a;color:#92400e;}' +
+      '.pv-stat.pv-warn{background:var(--cal-warn-bg);border-color:#fde68a;color:var(--cal-warn-text);}' +
       '.pv-stat.pv-warn b{color:#92400e;}' +
       '.pv-sec{margin-bottom:18px;}' +
       '.pv-sec-head{display:flex;align-items:center;gap:9px;cursor:pointer;padding:2px 0 7px;}' +
       '.pv-sec-head:hover .pv-sec-name{color:var(--blue);}' +
       '.pv-check{width:17px;height:17px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;}' +
       '.pv-complete .pv-check{background:var(--green);border-color:var(--green);}' +
-      '.pv-sec-name{font-size:14.5px;font-weight:600;color:#0f172a;flex:1;}' +
+      '.pv-sec-name{font-size:14.5px;font-weight:600;color:var(--text);flex:1;}' +
       '.pv-weight{font-size:11px;color:var(--muted);background:var(--bg);border-radius:4px;padding:1px 7px;}' +
       '.pv-count{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;}' +
       '.pv-bar{height:6px;border-radius:99px;background:var(--border);overflow:hidden;}' +
