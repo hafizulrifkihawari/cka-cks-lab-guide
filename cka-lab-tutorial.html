@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CKA Hands-On Lab Tutorial</title>
+<style>
+:root {
+  --sb: #0f172a; --sb-text: #94a3b8; --sb-active: #3b82f6;
+  --bg: #f8fafc; --white: #ffffff; --code-bg: #0d1117;
+  --border: #e2e8f0; --text: #1e293b; --muted: #64748b;
+  --blue: #3b82f6; --green: #22c55e; --yellow: #f59e0b;
+  --red: #ef4444; --purple: #a855f7;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; display:flex; background:var(--bg); color:var(--text); }
+#sidebar { width:280px; min-height:100vh; background:var(--sb); position:fixed; top:0; left:0; overflow-y:auto; z-index:100; }
+#sidebar::-webkit-scrollbar { width:4px; }
+#sidebar::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+.sb-header { padding:22px 18px 16px; border-bottom:1px solid rgba(255,255,255,.07); }
+.sb-header h1 { color:#fff; font-size:16px; font-weight:800; letter-spacing:-.3px; }
+.sb-header p { color:var(--sb-text); font-size:12px; margin-top:3px; }
+.sb-badges { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.sbadge { padding:2px 8px; border-radius:99px; font-size:11px; font-weight:600; }
+.sbadge-b { background:rgba(59,130,246,.2); color:#60a5fa; }
+.sbadge-g { background:rgba(34,197,94,.2); color:#4ade80; }
+.sbadge-y { background:rgba(245,158,11,.2); color:#fbbf24; }
+.sb-group { padding:8px 0; }
+.sb-group-title { padding:8px 18px 4px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:rgba(148,163,184,.4); }
+.nav-item { display:flex; align-items:center; gap:10px; padding:9px 18px; cursor:pointer; color:var(--sb-text); font-size:13.5px; border-left:3px solid transparent; transition:all .12s; }
+.nav-item:hover { background:rgba(255,255,255,.04); color:#fff; }
+.nav-item.active { background:rgba(59,130,246,.12); color:#93c5fd; border-left-color:var(--blue); }
+a.nav-item.nav-link { text-decoration:none; }
+a.nav-item.nav-link:hover { text-decoration:none; }
+.nav-icon { width:18px; text-align:center; font-size:13px; }
+.nav-pct { margin-left:auto; font-size:10px; padding:1px 7px; border-radius:99px; background:rgba(255,255,255,.08); color:rgba(255,255,255,.4); }
+.nav-pct.prog { background:rgba(34,197,94,.18); color:#4ade80; }
+.nav-toggle { margin-left:6px; font-size:9px; color:rgba(148,163,184,.5); cursor:pointer; padding:2px 4px; transition:transform .15s; }
+.nav-item.nav-expanded .nav-toggle { transform:rotate(90deg); }
+.nav-subtree { display:none; padding:2px 0 4px; }
+.nav-item.nav-expanded + .nav-subtree { display:block; }
+.nav-subitem { padding:6px 18px 6px 44px; font-size:12px; color:var(--sb-text); cursor:pointer; border-left:3px solid transparent; }
+.nav-subitem:hover { background:rgba(255,255,255,.04); color:#fff; }
+.sb-footer { padding:14px 18px 22px; border-top:1px solid rgba(255,255,255,.07); margin-top:8px; }
+.sb-reset { color:var(--sb-text); font-size:12px; cursor:pointer; }
+.sb-reset:hover { color:#f87171; }
+
+#main { margin-left:280px; flex:1; }
+.topbar { background:var(--white); border-bottom:1px solid var(--border); padding:12px 44px; display:flex; align-items:center; gap:8px; position:sticky; top:0; z-index:50; }
+.topbar-label { font-size:12px; color:var(--muted); }
+.topbar-title { font-size:13px; font-weight:600; color:var(--text); }
+.section { display:none; max-width:880px; margin:0 auto; padding:40px 44px 90px; }
+.section.active { display:block; }
+
+.section h1 { font-size:29px; font-weight:800; color:#0f172a; margin-bottom:6px; letter-spacing:-.5px; }
+.lead { font-size:15.5px; color:var(--muted); line-height:1.65; margin-bottom:26px; }
+.section h2 { font-size:20px; font-weight:700; color:#0f172a; margin:34px 0 12px; padding-bottom:8px; border-bottom:2px solid var(--border); }
+.h3wrap { display:flex; align-items:center; gap:10px; margin:24px 0 8px; }
+.h3wrap h3 { margin:0; flex:1; }
+.section h3 { font-size:16px; font-weight:600; color:#0f172a; }
+.pchk { width:19px; height:19px; flex-shrink:0; cursor:pointer; accent-color:var(--green); }
+.pchk-label { font-size:11px; color:var(--muted); cursor:pointer; user-select:none; white-space:nowrap; }
+.h3wrap.done h3 { color:var(--green); text-decoration:line-through; text-decoration-color:rgba(34,197,94,.4); }
+.section h4 { font-size:12.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin:16px 0 6px; }
+.section p { line-height:1.72; margin-bottom:12px; }
+.section ul,.section ol { margin-left:22px; margin-bottom:12px; line-height:1.8; }
+.section li { margin-bottom:3px; }
+a { color:var(--blue); text-decoration:none; }
+a:hover { text-decoration:underline; }
+code { background:#f1f5f9; color:#0f172a; padding:2px 6px; border-radius:4px; font-family:'SF Mono','Cascadia Code',monospace; font-size:12.5px; }
+
+pre { background:var(--code-bg); border-radius:10px; padding:16px 18px; overflow-x:auto; margin:12px 0; border:1px solid rgba(255,255,255,.08); position:relative; }
+pre code { color:#e2e8f0; font-family:'SF Mono','Cascadia Code','Fira Code',monospace; font-size:12.8px; line-height:1.65; background:none; padding:0; }
+.lang { position:absolute; top:9px; right:13px; font-size:10px; color:rgba(255,255,255,.25); font-family:monospace; text-transform:uppercase; letter-spacing:.5px; }
+.c { color:#6b7280; } .k { color:#60a5fa; } .v { color:#4ade80; } .n { color:#fbbf24; } .t { color:#c084fc; } .o { color:#f472b6; }
+
+.callout { padding:13px 17px; border-radius:8px; margin:13px 0; border-left:4px solid; font-size:14px; line-height:1.65; }
+.callout-title { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
+.tip { background:#f0fdf4; border-color:#22c55e; color:#14532d; }
+.warn { background:#fffbeb; border-color:#f59e0b; color:#78350f; }
+.info { background:#eff6ff; border-color:#3b82f6; color:#1e3a8a; }
+.danger { background:#fef2f2; border-color:#ef4444; color:#7f1d1d; }
+.exam { background:#fdf4ff; border-color:#a855f7; color:#4a044e; }
+.concept { background:#eef2ff; border-color:#6366f1; color:#312e81; }
+.verify { background:#ecfeff; border-color:#06b6d4; color:#164e63; }
+
+table { width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px; }
+th { background:#f8fafc; padding:9px 13px; text-align:left; font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); border-bottom:2px solid var(--border); }
+td { padding:9px 13px; border-bottom:1px solid var(--border); vertical-align:top; }
+tr:hover td { background:#f9fafb; }
+.tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:500; margin:2px; }
+.tb { background:#dbeafe; color:#1d4ed8; } .tg { background:#dcfce7; color:#15803d; } .ty { background:#fef9c3; color:#854d0e; } .tr { background:#fee2e2; color:#991b1b; } .tp { background:#f3e8ff; color:#6b21a8; }
+
+.steps { counter-reset:step; list-style:none; margin-left:0; }
+.steps li { counter-increment:step; display:flex; gap:12px; margin-bottom:12px; }
+.steps li::before { content:counter(step); background:var(--blue); color:#fff; font-weight:700; font-size:12px; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.envtag { display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; margin-left:8px; vertical-align:middle; }
+.env-kind { background:#dbeafe; color:#1d4ed8; }
+.env-vm { background:#fef9c3; color:#854d0e; }
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="sb-header">
+    <h1>CKA Lab Tutorial</h1>
+    <p>Build a cluster · run every case</p>
+    <div class="sb-badges">
+      <span class="sbadge sbadge-b">colima + kind</span>
+      <span class="sbadge sbadge-y">multipass</span>
+      <span class="sbadge sbadge-g">arm64 mac</span>
+    </div>
+  </div>
+
+  <div class="sb-group">
+    <div class="sb-group-title">Start Here</div>
+    <div class="nav-item active" onclick="show('overview')"><span class="nav-icon">🎯</span> Overview &amp; How to Use</div>
+    <div class="nav-item" onclick="show('prereqs')"><span class="nav-icon">🧰</span> Prerequisites &amp; Install</div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-title">Build the Lab</div>
+    <div class="nav-item" onclick="show('create')"><span class="nav-icon">🏗️</span> Create the KinD Cluster</div>
+    <div class="nav-item" onclick="show('addons')"><span class="nav-icon">🔌</span> Install Add-ons</div>
+  </div>
+  <div class="sb-group" data-tree>
+    <div class="sb-group-title">KinD Labs</div>
+    <div class="nav-item" onclick="show('lab-workloads')"><span class="nav-icon">📦</span> A · Workloads</div>
+    <div class="nav-item" onclick="show('lab-scheduling')"><span class="nav-icon">🧭</span> B · Scheduling</div>
+    <div class="nav-item" onclick="show('lab-networking')"><span class="nav-icon">🌐</span> C · Networking</div>
+    <div class="nav-item" onclick="show('lab-storage')"><span class="nav-icon">💾</span> D · Storage</div>
+    <div class="nav-item" onclick="show('lab-trouble')"><span class="nav-icon">🔍</span> E · Troubleshooting</div>
+    <div class="nav-item" onclick="show('lab-rbac')"><span class="nav-icon">🔑</span> F · RBAC</div>
+  </div>
+  <div class="sb-group" data-tree>
+    <div class="sb-group-title">Cluster Internals (VMs)</div>
+    <div class="nav-item" onclick="show('vm-setup')"><span class="nav-icon">🖥️</span> Provision VMs + kubeadm</div>
+    <div class="nav-item" onclick="show('lab-etcd')"><span class="nav-icon">🗄️</span> G · etcd Backup/Restore</div>
+    <div class="nav-item" onclick="show('lab-upgrade')"><span class="nav-icon">⬆️</span> H · Cluster Upgrade</div>
+    <div class="nav-item" onclick="show('lab-static')"><span class="nav-icon">📌</span> I · Static Pods &amp; API</div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-title">Ask</div>
+    <div class="nav-item" onclick="askClaudeOpen()"><span class="nav-icon">💬</span> Ask Claude <span class="nav-pct">⌘J</span></div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-title">Reference</div>
+    <div class="nav-item" onclick="show('cheatsheet')"><span class="nav-icon">📋</span> Command Reference</div>
+    <div class="nav-item" onclick="show('teardown')"><span class="nav-icon">🧹</span> Reset &amp; Teardown</div>
+    <div class="nav-item" onclick="show('fixlab')"><span class="nav-icon">🩹</span> Fix the Lab</div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-title">Study Guide</div>
+    <a class="nav-item nav-link" href="cka-study-guide.html#sec-overview"><span class="nav-icon">📖</span> CKA Handbook</a>
+    <a class="nav-item nav-link" href="cka-study-guide.html#sec-progress"><span class="nav-icon">📊</span> My Progress</a>
+  </div>
+  <div class="sb-footer">
+    <span class="sb-reset" onclick="resetProgress()">↺ Reset lab progress</span>
+  </div>
+</nav>
+
+<div id="main">
+  <div class="topbar">
+    <span class="topbar-label">CKA Lab Tutorial</span>
+    <span class="topbar-label">/</span>
+    <span class="topbar-title" id="topbar-title">Overview &amp; How to Use</span>
+  </div>
+
+  <!-- ================= OVERVIEW ================= -->
+  <div class="section active" id="sec-overview">
+    <h1>Hands-On CKA Lab</h1>
+    <p class="lead">This tutorial builds a real Kubernetes lab on your Mac, then walks you through every practice case from the CKA study guide. You run real commands, break real things, and fix them. Reading passes the time; doing passes the exam.</p>
+
+    <div class="callout concept"><div class="callout-title">Two Environments — Why</div>
+    Most cases run on <strong>KinD</strong> (Kubernetes in Docker) — it starts in a minute and needs little memory. But some Cluster-domain tasks touch a node's own operating system: <strong>kubeadm setup, etcd backup, cluster upgrade, kubelet, static pods</strong>. A KinD "node" is a container, not a machine, so those tasks want real VMs. You already have <strong>multipass</strong> for that. This split matches how the real exam clusters behave.</div>
+
+    <h2>What You Will Build</h2>
+    <table>
+      <tr><th>Environment</th><th>Tool</th><th>Runs which labs</th></tr>
+      <tr><td>3-node container cluster</td><td>colima + kind</td><td>A–F: workloads, scheduling, networking, storage, troubleshooting, RBAC</td></tr>
+      <tr><td>2 real Linux VMs</td><td>multipass</td><td>G–I: etcd, cluster upgrade, static pods &amp; API server</td></tr>
+    </table>
+
+    <h2>The Loop — Follow It for Every Lab</h2>
+    <ol class="steps">
+      <li><strong>Setup</strong> — create the scenario (a deployment, a broken pod, a policy).</li>
+      <li><strong>Do it</strong> — perform the task yourself first, without reading the answer.</li>
+      <li><strong>Verify</strong> — run the check command and compare to the expected output.</li>
+      <li><strong>Clean up</strong> — delete what you made, so the next lab starts clean.</li>
+    </ol>
+
+    <div class="callout tip"><div class="callout-title">Track Your Progress</div>
+    Each step has a <strong>checkbox</strong>. Tick it as you finish. Your marks are saved in this browser, so you can close the page and come back. The sidebar shows how many steps you have done per section.</div>
+
+    <div class="callout warn"><div class="callout-title">Before You Start</div>
+    Budget about <strong>6 GB RAM</strong> for the KinD cluster and another <strong>4 GB</strong> if you run the VMs at the same time. Close heavy apps. You can also do the KinD labs first, tear them down, then do the VM labs.</div>
+
+    <h2>Confirmed Tool Versions</h2>
+    <p>Every command in this tutorial was pinned to these current releases so the URLs work:</p>
+    <table>
+      <tr><th>Tool</th><th>Version</th></tr>
+      <tr><td>kind</td><td>v0.33.0</td></tr>
+      <tr><td>Calico (CNI + NetworkPolicy)</td><td>v3.32.1</td></tr>
+      <tr><td>metrics-server</td><td>v0.9.0 (latest)</td></tr>
+      <tr><td>ingress-nginx</td><td>controller-v1.15.1</td></tr>
+      <tr><td>Gateway API CRDs</td><td>v1.6.1</td></tr>
+    </table>
+  </div>
+
+  <!-- ================= PREREQS ================= -->
+  <div class="section" id="sec-prereqs">
+    <h1>Prerequisites &amp; Install <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">You already have <code>kubectl</code>, <code>helm</code>, and <code>multipass</code>. You still need a container engine and <code>kind</code>. On Apple Silicon, <strong>colima</strong> is the simplest free engine.</p>
+
+    <h3>Install colima and kind</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Install the container engine and kind (kubectl + helm already present)</span>
+brew install colima kind
+
+<span class="c"># Start colima with enough room for a 3-node cluster</span>
+colima start --cpu 4 --memory 6 --disk 40
+
+<span class="c"># Confirm the Docker engine is up and kind can see it</span>
+docker info | grep -i "server version"
+kind version</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>docker info</code> prints a Server Version with no error. <code>kind version</code> prints <code>v0.33.0</code> or newer. If <code>docker</code> says "cannot connect", colima is not started — run <code>colima start</code>.</div>
+
+    <div class="callout concept"><div class="callout-title">What colima Does</div>
+    colima runs a small Linux VM and a Docker engine inside it. <code>kind</code> then creates Kubernetes "nodes" as Docker containers in that engine. So the chain is: <strong>colima (Linux VM) → Docker → kind node containers → Kubernetes</strong>. When you stop colima, the whole lab pauses; start it again and the cluster returns.</div>
+
+    <div class="callout warn"><div class="callout-title">If You Use Docker Desktop Instead</div>
+    Docker Desktop also works. Start it, skip <code>colima</code>, and give it 6 GB in Settings → Resources. Everything else in this tutorial is identical.</div>
+  </div>
+
+  <!-- ================= CREATE CLUSTER ================= -->
+  <div class="section" id="sec-create">
+    <h1>Create the KinD Cluster <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">You build a 3-node cluster (1 control plane + 2 workers). You turn off the default network plugin so you can install Calico — the default plugin does not enforce NetworkPolicy, and you need that for the networking lab.</p>
+
+    <h3>Write the cluster config</h3>
+    <p>Save this as <code>kind-config.yaml</code>:</p>
+    <pre><span class="lang">yaml</span><code><span class="k">kind</span>: <span class="t">Cluster</span>
+<span class="k">apiVersion</span>: <span class="v">kind.x-k8s.io/v1alpha4</span>
+<span class="k">networking</span>:
+  <span class="k">disableDefaultCNI</span>: <span class="t">true</span>       <span class="c"># turn off kindnet, so Calico can enforce NetworkPolicy</span>
+  <span class="k">podSubnet</span>: <span class="v">"192.168.0.0/16"</span>   <span class="c"># matches Calico's default range</span>
+<span class="k">nodes</span>:
+- <span class="k">role</span>: <span class="v">control-plane</span>
+  <span class="k">kubeadmConfigPatches</span>:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"   <span class="c"># lets ingress-nginx schedule here</span>
+  <span class="k">extraPortMappings</span>:              <span class="c"># expose 80/443 on your Mac for Ingress</span>
+  - <span class="k">containerPort</span>: <span class="n">80</span>
+    <span class="k">hostPort</span>: <span class="n">80</span>
+    <span class="k">protocol</span>: <span class="v">TCP</span>
+  - <span class="k">containerPort</span>: <span class="n">443</span>
+    <span class="k">hostPort</span>: <span class="n">443</span>
+    <span class="k">protocol</span>: <span class="v">TCP</span>
+- <span class="k">role</span>: <span class="v">worker</span>
+- <span class="k">role</span>: <span class="v">worker</span></code></pre>
+
+    <h3>Create the cluster</h3>
+    <pre><span class="lang">bash</span><code>kind create cluster --name cka --config kind-config.yaml
+
+<span class="c"># kubectl is pointed at the new cluster automatically</span>
+kubectl config current-context     <span class="c"># kind-cka</span>
+kubectl get nodes</code></pre>
+    <div class="callout warn"><div class="callout-title">Nodes Show NotReady — That Is Expected</div>
+    You disabled the default CNI, so nodes stay <code>NotReady</code> until you install Calico on the next page. Do not panic — this is by design.</div>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl get nodes</code> lists three nodes: <code>cka-control-plane</code>, <code>cka-worker</code>, <code>cka-worker2</code>. Status is <code>NotReady</code> for now.</div>
+
+    <div class="callout tip"><div class="callout-title">See the Node Containers</div>
+    Run <code>docker ps</code>. Each Kubernetes node is a Docker container. You will use <code>docker exec</code> into these later to explore etcd and static pods — a trick the real exam does not need, but great for learning.</div>
+  </div>
+
+  <!-- ================= ADDONS ================= -->
+  <div class="section" id="sec-addons">
+    <h1>Install Add-ons <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">A bare cluster cannot run every lab. Install four add-ons, each for a clear reason. Do Calico first — it makes the nodes Ready.</p>
+
+    <h3>1 · Calico — network + NetworkPolicy</h3>
+    <p>Calico gives pods a network and, unlike the default plugin, <strong>enforces NetworkPolicy</strong>. The networking lab needs this.</p>
+    <pre><span class="lang">bash</span><code>kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.32.1/manifests/calico.yaml
+
+<span class="c"># Wait until Calico is running, then nodes turn Ready</span>
+kubectl -n kube-system rollout status ds/calico-node --timeout=180s
+kubectl get nodes</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    All three nodes now show <code>Ready</code>. <code>kubectl get pods -n kube-system | grep calico</code> shows <code>calico-node</code> pods Running.</div>
+
+    <h3>2 · metrics-server — for HPA, QoS, and <code>kubectl top</code></h3>
+    <p>metrics-server collects CPU/memory usage. Without it, HPA shows <code>&lt;unknown&gt;</code> and <code>kubectl top</code> fails. On kind you must add one flag, because kind's kubelet uses a self-signed certificate.</p>
+    <pre><span class="lang">bash</span><code>kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+<span class="c"># kind fix: trust the kubelet's self-signed cert</span>
+kubectl -n kube-system patch deployment metrics-server --type=json \
+  -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+
+kubectl -n kube-system rollout status deploy/metrics-server --timeout=120s</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    After about a minute, <code>kubectl top nodes</code> prints CPU and memory numbers instead of an error.</div>
+
+    <h3>3 · ingress-nginx — for the Ingress lab</h3>
+    <pre><span class="lang">bash</span><code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.15.1/deploy/static/provider/kind/deploy.yaml
+
+kubectl -n ingress-nginx rollout status deploy/ingress-nginx-controller --timeout=180s</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl get pods -n ingress-nginx</code> shows the controller Running. Because of the port mappings, an Ingress on host <code>localhost</code> will answer on your Mac.</div>
+
+    <h3>4 · Gateway API CRDs — for the Gateway lab (optional)</h3>
+    <p>The Gateway API objects are CustomResourceDefinitions. Install the standard set. This alone satisfies the "install the CRDs a Gateway needs" case.</p>
+    <pre><span class="lang">bash</span><code>kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+
+kubectl get crd | grep gateway.networking.k8s.io</code></pre>
+    <div class="callout info"><div class="callout-title">Controller Optional</div>
+    CRDs let you <em>create</em> Gateway and HTTPRoute objects and see them accepted. To actually route traffic you also need a controller (for example nginx-gateway-fabric via Helm). That is heavier; the CRD step is enough to practice the exam task.</div>
+
+    <div class="callout tip"><div class="callout-title">Storage Is Already Here</div>
+    kind ships a default StorageClass named <code>standard</code>. Run <code>kubectl get sc</code> — you use it in the storage lab. No install needed.</div>
+  </div>
+
+  <!-- ================= LAB A WORKLOADS ================= -->
+  <div class="section" id="sec-lab-workloads">
+    <h1>Lab A · Workloads <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">Deployments, rolling updates, sidecars, health probes, and autoscaling. Create a scratch namespace first, then work inside it.</p>
+    <pre><span class="lang">bash</span><code>kubectl create namespace lab
+kubectl config set-context --current --namespace=lab</code></pre>
+
+    <h3>A1 · Create, scale, and roll back a Deployment</h3>
+    <p><strong>Task:</strong> Run <code>web</code> (nginx:1.25, 3 replicas). Update to 1.26. Then roll back.</p>
+    <pre><span class="lang">bash</span><code>kubectl create deployment web --image=nginx:1.25 --replicas=3
+kubectl set image deployment/web nginx=nginx:1.26
+kubectl rollout status deployment/web
+kubectl rollout history deployment/web
+kubectl rollout undo deployment/web</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl describe deploy web | grep Image</code> shows <code>nginx:1.25</code> again after the undo.</div>
+
+    <h3>A2 · Add a native sidecar</h3>
+    <p><strong>Task:</strong> Run a pod where a sidecar starts before the app and keeps running.</p>
+    <pre><span class="lang">bash</span><code>cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar-demo
+spec:
+  initContainers:
+  - name: shipper
+    image: busybox
+    restartPolicy: Always            # this makes it a native sidecar
+    command: ["sh","-c","while true; do echo shipping logs; sleep 5; done"]
+  containers:
+  - name: app
+    image: nginx
+EOF
+kubectl get pod sidecar-demo</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl get pod sidecar-demo</code> shows <code>2/2</code> Ready. <code>kubectl logs sidecar-demo -c shipper</code> streams "shipping logs".</div>
+
+    <h3>A3 · Add liveness and readiness probes</h3>
+    <p><strong>Task:</strong> Give an app a readiness probe (controls traffic) and a liveness probe (restarts it). Then watch each behave differently.</p>
+    <pre><span class="lang">bash</span><code>cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: probes
+  labels: { app: probes }
+spec:
+  containers:
+  - name: app
+    image: registry.k8s.io/e2e-test-images/agnhost:2.47
+    args: ["netexec","--http-port=8080"]
+    readinessProbe:
+      httpGet: { path: /readyz, port: 8080 }
+      periodSeconds: 3
+    livenessProbe:
+      httpGet: { path: /healthz, port: 8080 }
+      periodSeconds: 3
+      failureThreshold: 2
+EOF
+kubectl expose pod probes --port=8080
+kubectl get endpoints probes</code></pre>
+    <p><strong>Now break readiness</strong> (the agnhost app lets you flip its own health):</p>
+    <pre><span class="lang">bash</span><code><span class="c"># Force /readyz to fail — pod leaves Endpoints but is NOT restarted</span>
+kubectl exec probes -- /bin/sh -c "curl -s localhost:8080/readyz?state=false" 2>/dev/null || true
+kubectl get endpoints probes     <span class="c"># the pod IP disappears</span>
+kubectl get pod probes           <span class="c"># RESTARTS stays 0</span></code></pre>
+    <div class="callout concept"><div class="callout-title">The Point</div>
+    Readiness removed the pod from the Service (no traffic) but left it running. A liveness failure, by contrast, restarts the container — watch the RESTARTS column climb if <code>/healthz</code> fails. This is the difference the exam tests.</div>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    After breaking readiness, <code>kubectl get endpoints probes</code> shows no addresses, yet <code>kubectl get pod probes</code> still shows the pod Running with 0 restarts.</div>
+
+    <h3>A4 · Autoscale on CPU (HPA)</h3>
+    <p><strong>Task:</strong> Add an HPA to a deployment (min 1, max 5, 50% CPU), then drive load and watch it scale.</p>
+    <pre><span class="lang">bash</span><code>kubectl create deployment php --image=registry.k8s.io/hpa-example
+kubectl set resources deployment php --requests=cpu=100m --limits=cpu=200m
+kubectl expose deployment php --port=80
+kubectl autoscale deployment php --cpu-percent=50 --min=1 --max=5
+
+<span class="c"># Generate load from a throwaway pod (leave it running, watch another terminal)</span>
+kubectl run -it load --image=busybox --restart=Never --rm -- \
+  /bin/sh -c "while true; do wget -q -O- http://php; done"</code></pre>
+    <pre><span class="lang">bash</span><code><span class="c"># In a second terminal:</span>
+kubectl get hpa php --watch</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    The HPA TARGETS climbs above 50% and REPLICAS grows toward 5. Stop the load pod (Ctrl-C) and replicas fall back after a few minutes.</div>
+
+    <h4>Clean up Lab A</h4>
+    <pre><span class="lang">bash</span><code>kubectl delete deploy web php --ignore-not-found
+kubectl delete pod sidecar-demo probes --ignore-not-found
+kubectl delete svc probes php --ignore-not-found
+kubectl delete hpa php --ignore-not-found</code></pre>
+  </div>
+
+  <!-- ================= LAB B SCHEDULING ================= -->
+  <div class="section" id="sec-lab-scheduling">
+    <h1>Lab B · Scheduling &amp; Resource Control <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">Steer where pods run and how resources are shared: affinity, taints, priority/preemption, QoS, quotas, and disruption budgets. Stay in the <code>lab</code> namespace.</p>
+
+    <h3>B1 · Node affinity — pin to a labelled node</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Label one worker as SSD</span>
+kubectl label node cka-worker disktype=ssd
+
+cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata: { name: ssd-pod }
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - { key: disktype, operator: In, values: [ssd] }
+  containers:
+  - { name: app, image: nginx }
+EOF
+kubectl get pod ssd-pod -o wide</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl get pod ssd-pod -o wide</code> shows it scheduled on <code>cka-worker</code> (the SSD node), never <code>cka-worker2</code>.</div>
+
+    <h3>B2 · Taints and tolerations</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Repel pods from worker2</span>
+kubectl taint node cka-worker2 tier=critical:NoSchedule
+
+<span class="c"># A pod without the toleration will avoid worker2; add one to allow it</span>
+cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata: { name: tolerant }
+spec:
+  tolerations:
+  - { key: tier, operator: Equal, value: critical, effect: NoSchedule }
+  nodeName: cka-worker2
+  containers:
+  - { name: app, image: nginx }
+EOF
+kubectl get pod tolerant -o wide
+kubectl taint node cka-worker2 tier=critical:NoSchedule-   # remove the taint</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    The tolerant pod runs on <code>cka-worker2</code>. A pod without the toleration stays off it.</div>
+
+    <h3>B3 · PriorityClass and preemption</h3>
+    <p><strong>Task:</strong> Fill one node with low-priority pods, then schedule a high-priority pod that must evict one to fit.</p>
+    <pre><span class="lang">bash</span><code>kubectl create priorityclass low  --value=1000
+kubectl create priorityclass high --value=100000
+
+<span class="c"># Find a worker's allocatable CPU so you can fill it</span>
+kubectl describe node cka-worker | grep -A5 Allocatable
+
+<span class="c"># Fill cka-worker with low-priority pods (tune replicas/cpu to exceed allocatable)</span>
+cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: filler }
+spec:
+  replicas: 4
+  selector: { matchLabels: { app: filler } }
+  template:
+    metadata: { labels: { app: filler } }
+    spec:
+      priorityClassName: low
+      nodeSelector: { disktype: ssd }        # pin all to cka-worker
+      containers:
+      - name: c
+        image: nginx
+        resources: { requests: { cpu: "500m" } }
+EOF</code></pre>
+    <pre><span class="lang">bash</span><code><span class="c"># Now a high-priority pod that also needs cka-worker — it preempts a filler</span>
+cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata: { name: vip }
+spec:
+  priorityClassName: high
+  nodeSelector: { disktype: ssd }
+  containers:
+  - name: c
+    image: nginx
+    resources: { requests: { cpu: "500m" } }
+EOF
+kubectl get events | grep -i preempt
+kubectl get pods -l app=filler</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>vip</code> reaches Running. An event mentions preemption, and one <code>filler</code> pod was evicted to free room. If nothing preempts, raise the filler replicas or CPU requests until the node is truly full.</div>
+
+    <h3>B4 · QoS classes</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Guaranteed: requests == limits</span>
+kubectl run g --image=nginx --restart=Never \
+  --overrides='{"spec":{"containers":[{"name":"g","image":"nginx","resources":{"requests":{"cpu":"100m","memory":"64Mi"},"limits":{"cpu":"100m","memory":"64Mi"}}}]}}'
+<span class="c"># BestEffort: nothing set</span>
+kubectl run b --image=nginx --restart=Never
+
+kubectl get pod g -o jsonpath='{.status.qosClass}{"\n"}'   # Guaranteed
+kubectl get pod b -o jsonpath='{.status.qosClass}{"\n"}'   # BestEffort</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    Pod <code>g</code> reports <code>Guaranteed</code>; pod <code>b</code> reports <code>BestEffort</code>. Under memory pressure the kubelet would evict <code>b</code> first.</div>
+
+    <h3>B5 · ResourceQuota</h3>
+    <pre><span class="lang">bash</span><code>kubectl create namespace quota-demo
+kubectl create quota cpu-quota --hard=requests.cpu=1 -n quota-demo
+
+<span class="c"># First pod (500m) fits; a second 500m pod is rejected at 1 CPU total</span>
+kubectl run p1 --image=nginx -n quota-demo --restart=Never \
+  --overrides='{"spec":{"containers":[{"name":"p1","image":"nginx","resources":{"requests":{"cpu":"500m"}}}]}}'
+kubectl run p2 --image=nginx -n quota-demo --restart=Never \
+  --overrides='{"spec":{"containers":[{"name":"p2","image":"nginx","resources":{"requests":{"cpu":"600m"}}}]}}'
+kubectl describe quota cpu-quota -n quota-demo</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>p2</code> is rejected with a "exceeded quota" error. <code>kubectl describe quota</code> shows used 500m of 1 CPU. Note: once a quota sets <code>requests.cpu</code>, every pod must declare that request.</div>
+
+    <h3>B6 · PodDisruptionBudget during a drain</h3>
+    <pre><span class="lang">bash</span><code>kubectl create deployment web --image=nginx --replicas=3
+kubectl create pdb web-pdb --selector=app=web --min-available=2
+
+<span class="c"># Find which worker holds web pods, then drain it</span>
+kubectl get pods -l app=web -o wide
+kubectl drain cka-worker2 --ignore-daemonsets --delete-emptydir-data
+kubectl get pdb web-pdb
+kubectl uncordon cka-worker2     <span class="c"># bring the node back after</span></code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    The drain evicts web pods one at a time and never drops below 2 available. <code>kubectl get pdb</code> shows ALLOWED DISRUPTIONS. If the app had only 2 replicas, the drain would block — that is the PDB protecting you.</div>
+
+    <h4>Clean up Lab B</h4>
+    <pre><span class="lang">bash</span><code>kubectl delete pod ssd-pod tolerant vip g b --ignore-not-found
+kubectl delete deploy filler web --ignore-not-found
+kubectl delete pdb web-pdb --ignore-not-found
+kubectl delete priorityclass low high --ignore-not-found
+kubectl delete ns quota-demo --ignore-not-found
+kubectl label node cka-worker disktype-    </code></pre>
+  </div>
+
+  <!-- ================= LAB C NETWORKING ================= -->
+  <div class="section" id="sec-lab-networking">
+    <h1>Lab C · Services &amp; Networking <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">Services, Endpoints, DNS, NetworkPolicy, and Ingress. NetworkPolicy is enforced because you installed Calico.</p>
+
+    <h3>C1 · Expose a Deployment and confirm Endpoints</h3>
+    <pre><span class="lang">bash</span><code>kubectl create deployment web --image=nginx --replicas=2
+kubectl expose deployment web --port=80
+kubectl get endpoints web</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl get endpoints web</code> lists two pod IPs. Test it: <code>kubectl run t --image=busybox --rm -it --restart=Never -- wget -qO- http://web</code> returns the nginx welcome HTML.</div>
+
+    <h3>C2 · Fix a Service with no Endpoints</h3>
+    <p><strong>Task:</strong> Break the Service on purpose (wrong selector), see empty Endpoints, then fix it.</p>
+    <pre><span class="lang">bash</span><code>kubectl patch svc web -p '{"spec":{"selector":{"app":"wrong"}}}'
+kubectl get endpoints web      <span class="c"># now empty — no pods match</span>
+
+<span class="c"># Fix: point the selector back at the real pod label</span>
+kubectl patch svc web -p '{"spec":{"selector":{"app":"web"}}}'
+kubectl get endpoints web      <span class="c"># IPs return</span></code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    Endpoints are empty after the bad patch and repopulate after the fix. This is the single most common Service bug on the exam.</div>
+
+    <h3>C3 · NetworkPolicy — deny all, then allow only frontend</h3>
+    <pre><span class="lang">bash</span><code>kubectl create namespace netpol
+kubectl label ns netpol name=netpol
+kubectl -n netpol run backend  --image=nginx --labels=app=backend --port=80
+kubectl -n netpol expose pod backend --port=80
+kubectl -n netpol run frontend --image=busybox --labels=app=frontend -- sleep 3600
+kubectl -n netpol run other    --image=busybox --labels=app=other    -- sleep 3600
+
+<span class="c"># Before any policy: both can reach backend</span>
+kubectl -n netpol exec frontend -- wget -qO- --timeout=3 http://backend &amp;&amp; echo OK
+kubectl -n netpol exec other    -- wget -qO- --timeout=3 http://backend &amp;&amp; echo OK</code></pre>
+    <pre><span class="lang">bash</span><code><span class="c"># Deny all ingress in the namespace, then allow only app=frontend</span>
+cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: default-deny, namespace: netpol }
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: allow-frontend, namespace: netpol }
+spec:
+  podSelector: { matchLabels: { app: backend } }
+  policyTypes: [Ingress]
+  ingress:
+  - from:
+    - podSelector: { matchLabels: { app: frontend } }
+    ports:
+    - { protocol: TCP, port: 80 }
+EOF</code></pre>
+    <pre><span class="lang">bash</span><code><span class="c"># Now frontend works; other times out</span>
+kubectl -n netpol exec frontend -- wget -qO- --timeout=3 http://backend &amp;&amp; echo "frontend OK"
+kubectl -n netpol exec other    -- wget -qO- --timeout=3 http://backend || echo "other BLOCKED"</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>frontend</code> gets the page; <code>other</code> times out and prints BLOCKED. If <em>both</em> still work, Calico did not install correctly — recheck the add-ons page.</div>
+
+    <h3>C4 · CoreDNS resolution</h3>
+    <pre><span class="lang">bash</span><code>kubectl -n netpol exec frontend -- nslookup backend
+kubectl -n netpol exec frontend -- nslookup backend.netpol.svc.cluster.local</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    Both lookups return the Service ClusterIP. This proves the FQDN pattern <code>&lt;svc&gt;.&lt;ns&gt;.svc.cluster.local</code>.</div>
+
+    <h3>C5 · Ingress</h3>
+    <pre><span class="lang">bash</span><code>kubectl create deployment site --image=nginx
+kubectl expose deployment site --port=80
+cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: { name: site }
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend: { service: { name: site, port: { number: 80 } } }
+EOF
+sleep 5
+curl -s http://localhost/ | grep -i "welcome to nginx"</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>curl http://localhost/</code> returns the nginx welcome page — traffic went from your Mac, through the mapped port, to ingress-nginx, to the Service, to a pod.</div>
+
+    <h4>Clean up Lab C</h4>
+    <pre><span class="lang">bash</span><code>kubectl delete deploy web site --ignore-not-found
+kubectl delete svc web site --ignore-not-found
+kubectl delete ingress site --ignore-not-found
+kubectl delete ns netpol --ignore-not-found</code></pre>
+  </div>
+
+  <!-- ================= LAB D STORAGE ================= -->
+  <div class="section" id="sec-lab-storage">
+    <h1>Lab D · Storage <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">The admin/developer contract: a PV offers storage, a PVC claims it, a pod mounts the claim. Then dynamic provisioning with the default StorageClass.</p>
+
+    <h3>D1 · Static PV + PVC + pod</h3>
+    <pre><span class="lang">bash</span><code>cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolume
+metadata: { name: pv-manual }
+spec:
+  capacity: { storage: 1Gi }
+  accessModes: [ReadWriteOnce]
+  storageClassName: manual
+  hostPath: { path: /tmp/pv-manual }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: { name: pvc-manual, namespace: lab }
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: manual
+  resources: { requests: { storage: 1Gi } }
+EOF
+kubectl get pv,pvc -n lab</code></pre>
+    <pre><span class="lang">bash</span><code>cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata: { name: uses-pvc, namespace: lab }
+spec:
+  volumes:
+  - name: data
+    persistentVolumeClaim: { claimName: pvc-manual }
+  containers:
+  - name: app
+    image: nginx
+    volumeMounts:
+    - { name: data, mountPath: /data }
+EOF
+kubectl -n lab exec uses-pvc -- sh -c "echo hello > /data/f &amp;&amp; cat /data/f"</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    The PVC STATUS is <code>Bound</code>. The pod starts and writes/reads <code>/data/f</code>.</div>
+
+    <h3>D2 · Dynamic provisioning (default StorageClass)</h3>
+    <pre><span class="lang">bash</span><code>kubectl get sc     <span class="c"># 'standard' is the default on kind</span>
+cat &lt;&lt;'EOF' | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: { name: pvc-dynamic, namespace: lab }
+spec:
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }    # no storageClassName → uses default
+EOF
+kubectl -n lab get pvc pvc-dynamic</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    A PV is created automatically and the PVC becomes <code>Bound</code> with no PV made by hand. That is dynamic provisioning.</div>
+
+    <div class="callout warn"><div class="callout-title">Honest Limit — PVC Expansion</div>
+    The guide's "expand a PVC 2Gi → 5Gi" case needs a StorageClass with <code>allowVolumeExpansion: true</code> and a driver that supports it. kind's default <code>local-path</code> provisioner does <strong>not</strong> support online expansion, so this one case cannot be fully completed on kind. Practice the concept here (patch the PVC size and read the error), and do the real expansion on a cloud cluster or a CSI driver that supports it. The command to know is: <code>kubectl patch pvc &lt;name&gt; -p '{"spec":{"resources":{"requests":{"storage":"5Gi"}}}}'</code>.</div>
+
+    <h4>Clean up Lab D</h4>
+    <pre><span class="lang">bash</span><code>kubectl -n lab delete pod uses-pvc --ignore-not-found
+kubectl -n lab delete pvc pvc-manual pvc-dynamic --ignore-not-found
+kubectl delete pv pv-manual --ignore-not-found</code></pre>
+  </div>
+
+  <!-- ================= LAB E TROUBLESHOOTING ================= -->
+  <div class="section" id="sec-lab-trouble">
+    <h1>Lab E · Troubleshooting <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">Break things on purpose and fix them. This is 30% of the exam — practice the reflexes.</p>
+
+    <h3>E1 · CrashLoopBackOff — find the cause</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># A container that exits immediately with an error</span>
+kubectl run crasher --image=busybox --restart=Always -- /bin/sh -c "echo boom; exit 1"
+sleep 15
+kubectl get pod crasher                 <span class="c"># CrashLoopBackOff</span>
+kubectl describe pod crasher | tail -20 <span class="c"># Events + Last State</span>
+kubectl logs crasher --previous         <span class="c"># output of the crashed run</span></code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>logs --previous</code> shows "boom". You located the cause without guessing. Fix would be to correct the command.</div>
+
+    <h3>E2 · Debug a distroless pod with no shell</h3>
+    <pre><span class="lang">bash</span><code>kubectl run distroless --image=gcr.io/distroless/static-debian12 --command -- sleep 3600
+<span class="c"># It has no shell, so exec fails. Attach an ephemeral debug container:</span>
+kubectl debug distroless -it --image=busybox --target=distroless -- sh -c "ps; ls /proc/1/root"</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    A plain <code>kubectl exec distroless -- sh</code> fails (no shell). The <code>kubectl debug</code> busybox container opens and can see the target's processes.</div>
+
+    <h3>E3 · Broken Service — reuse the C2 skill</h3>
+    <p>Break a Service selector, confirm empty Endpoints, fix it — same drill as Lab C2. On the exam, a "app can't reach app" task is almost always a label/selector mismatch or wrong namespace.</p>
+
+    <h3>E4 · Simulate a NotReady node and recover</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Stop the kubelet inside a worker's container — the node goes NotReady</span>
+docker exec cka-worker2 systemctl stop kubelet
+sleep 20
+kubectl get nodes                       <span class="c"># cka-worker2 = NotReady</span>
+
+<span class="c"># Recover: start the kubelet again</span>
+docker exec cka-worker2 systemctl start kubelet
+sleep 15
+kubectl get nodes                       <span class="c"># back to Ready</span></code></pre>
+    <div class="callout concept"><div class="callout-title">Why This Mirrors the Exam</div>
+    On a real node you would run <code>systemctl status kubelet</code> and <code>journalctl -u kubelet</code> to diagnose, then restart it. Here you drive the kubelet through <code>docker exec</code> because the node is a container — but the fix (restart kubelet) is exactly the same.</div>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    The node flips NotReady → Ready as you stop and start the kubelet.</div>
+
+    <h4>Clean up Lab E</h4>
+    <pre><span class="lang">bash</span><code>kubectl delete pod crasher distroless --ignore-not-found</code></pre>
+  </div>
+
+  <!-- ================= LAB F RBAC ================= -->
+  <div class="section" id="sec-lab-rbac">
+    <h1>Lab F · RBAC <span class="envtag env-kind">KinD</span></h1>
+    <p class="lead">Grant a subject exactly the access it needs, then prove it with <code>auth can-i</code>. Runs fully on KinD.</p>
+
+    <h3>F1 · Role + RoleBinding for a user</h3>
+    <pre><span class="lang">bash</span><code>kubectl create namespace app
+kubectl create role pod-reader --verb=get,list,watch --resource=pods -n app
+kubectl create rolebinding dev-pods --role=pod-reader --user=dev -n app
+
+kubectl auth can-i list pods   --as=dev -n app     <span class="c"># yes</span>
+kubectl auth can-i delete pods --as=dev -n app     <span class="c"># no</span>
+kubectl auth can-i list pods   --as=dev -n default <span class="c"># no (namespaced)</span></code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    First check prints <code>yes</code>; the other two print <code>no</code>. The Role is additive and namespaced, exactly as designed.</div>
+
+    <h3>F2 · ClusterRole for a ServiceAccount</h3>
+    <pre><span class="lang">bash</span><code>kubectl create serviceaccount reader -n app
+kubectl create clusterrole node-viewer --verb=get,list --resource=nodes
+kubectl create clusterrolebinding reader-nodes \
+  --clusterrole=node-viewer --serviceaccount=app:reader
+
+kubectl auth can-i list nodes --as=system:serviceaccount:app:reader   <span class="c"># yes</span></code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    The ServiceAccount can list nodes (cluster-scoped) but nothing else.</div>
+
+    <h4>Clean up Lab F</h4>
+    <pre><span class="lang">bash</span><code>kubectl delete ns app --ignore-not-found
+kubectl delete clusterrole node-viewer --ignore-not-found
+kubectl delete clusterrolebinding reader-nodes --ignore-not-found</code></pre>
+
+    <div class="callout tip"><div class="callout-title">Done With KinD?</div>
+    You have now run the Workloads, Scheduling, Networking, Storage, Troubleshooting, and RBAC cases. The last three cases (etcd, upgrade, static pods/API) need real machines — continue to the VM section. To free memory first, you can tear the KinD cluster down (see Reference → Reset &amp; Teardown) and rebuild it later.</div>
+  </div>
+
+  <!-- ================= VM SETUP ================= -->
+  <div class="section" id="sec-vm-setup">
+    <h1>Provision VMs + kubeadm <span class="envtag env-vm">VMs</span></h1>
+    <p class="lead">Build a real 2-node cluster with <strong>multipass</strong> (already installed). Here you touch the node's operating system, so etcd, upgrades, and static pods behave exactly like the exam.</p>
+
+    <div class="callout warn"><div class="callout-title">Resources</div>
+    Each VM uses ~2 GB RAM. If your KinD cluster is still running, tear it down first (Reference → Teardown) to leave room.</div>
+
+    <div class="callout warn"><div class="callout-title">V0 · Start the multipass daemon first</div>
+    A stopped daemon makes every command fail with <code>cannot connect to the multipass socket</code>. Start it, then confirm:
+    <pre><span class="lang">bash</span><code>sudo launchctl kickstart -k system/com.canonical.multipassd
+multipass list                       <span class="c"># prints a header, no socket error</span></code></pre>
+    <strong>Why:</strong> multipass runs a background daemon (<code>multipassd</code>) that owns the VMs. Every <code>multipass</code> command talks to it over a socket. <code>kickstart -k</code> restarts it under launchd.</div>
+
+    <div class="callout tip"><div class="callout-title">Shortcut — helper scripts</div>
+    The folder <code>kube-lab/</code> holds ready-to-run scripts for these steps: <code>launch.sh</code> (V1+V2 on the host), <code>prep-node.sh</code> (runs inside each VM), and <code>init-cp.sh</code> (V3 on cp). Run <code>bash kube-lab/launch.sh</code> to do V1 and V2 in one command, or follow the manual steps below to learn each piece.</div>
+
+    <h3>V1 · Launch two Ubuntu VMs</h3>
+    <pre><span class="lang">bash</span><code>multipass launch --name cp --cpus 2 --memory 2G --disk 12G 22.04
+multipass launch --name w1 --cpus 2 --memory 2G --disk 12G 22.04
+
+multipass list                       <span class="c"># note the cp IP (e.g. 192.168.64.x)</span>
+CP_IP=$(multipass info cp | awk '/IPv4/{print $2}')
+echo "control plane IP = $CP_IP"</code></pre>
+
+    <div class="callout concept"><div class="callout-title">Why these flags</div>
+    <strong>2 VMs</strong> give you one control plane (<code>cp</code>) and one worker (<code>w1</code>) — the minimum for a real join. <strong>2 GB RAM each</strong> is enough for the control-plane pods plus a few workloads. You capture <strong>CP_IP</strong> now because <code>kubeadm init</code> and the worker join both need the control plane's real IP. A multipass VM has several interfaces, so you pin the right one instead of guessing.</div>
+
+    <h3>V2 · Prepare both nodes (run on cp and w1)</h3>
+    <p>Open a shell on each with <code>multipass shell cp</code> (and later <code>w1</code>), then run:</p>
+    <pre><span class="lang">bash</span><code>sudo swapoff -a
+sudo sed -i '/swap/d' /etc/fstab
+
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+sudo modprobe overlay &amp;&amp; sudo modprobe br_netfilter
+
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+sudo sysctl --system
+
+<span class="c"># Container runtime</span>
+sudo apt-get update &amp;&amp; sudo apt-get install -y containerd
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml >/dev/null
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+sudo systemctl restart containerd
+
+<span class="c"># Kubernetes packages (arm64 works from pkgs.k8s.io)</span>
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.36/deb/Release.key \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.36/deb/ /' \
+  | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl</code></pre>
+
+    <div class="callout concept"><div class="callout-title">Why each prep step</div>
+    <ul>
+      <li><strong>swapoff + strip fstab</strong> — the kubelet refuses to start with swap on. Kubernetes wants full control of memory scheduling. Removing the fstab line keeps swap off after reboot.</li>
+      <li><strong>overlay + br_netfilter modules</strong> — <code>overlay</code> is the filesystem containerd layers images with. <code>br_netfilter</code> lets bridged pod traffic pass through iptables, so Services and NetworkPolicy work.</li>
+      <li><strong>sysctl bridge-nf-call + ip_forward</strong> — makes bridged pod traffic visible to iptables (kube-proxy needs this) and turns the node into a router between pods. Skip it and pod-to-pod networking breaks silently.</li>
+      <li><strong>containerd + SystemdCgroup=true</strong> — containerd is the container runtime (CRI). Its cgroup driver must match the kubelet's, which is <code>systemd</code> on Ubuntu. A mismatch causes random kubelet crashes — a classic exam gotcha.</li>
+      <li><strong>apt-mark hold</strong> — pins the three packages so a routine <code>apt upgrade</code> can't jump a minor version and break the cluster. You upgrade on purpose with <code>kubeadm upgrade</code> (Lab H).</li>
+    </ul></div>
+
+    <h3>V3 · Initialize the control plane (on cp)</h3>
+    <pre><span class="lang">bash</span><code>sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=$CP_IP
+
+<span class="c"># Set up kubectl for your user</span>
+mkdir -p $HOME/.kube
+sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+<span class="c"># Install Calico so nodes go Ready</span>
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.32.1/manifests/calico.yaml
+
+<span class="c"># Copy the printed "kubeadm join ..." command for the next step</span></code></pre>
+
+    <div class="callout concept"><div class="callout-title">Why each part of init</div>
+    <ul>
+      <li><strong>kubeadm init</strong> — bootstraps the control plane: generates certs and starts etcd, the API server, scheduler, and controller-manager as static pods.</li>
+      <li><strong>--pod-network-cidr=192.168.0.0/16</strong> — sets the pod IP range. It must match Calico's default, or pods get IPs the CNI will not route.</li>
+      <li><strong>--apiserver-advertise-address=$CP_IP</strong> — pins the API server to the VM's real IP, so workers can reach it.</li>
+      <li><strong>copy admin.conf to ~/.kube/config</strong> — this file is your cluster-admin credential. kubectl reads it to reach the API server.</li>
+      <li><strong>Calico</strong> — a fresh cluster has no pod network, so nodes stay <code>NotReady</code>. Calico assigns pod IPs and enforces NetworkPolicy. Nodes flip to <code>Ready</code> soon after.</li>
+    </ul></div>
+
+    <h3>V4 · Join the worker (on w1)</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Paste the join command kubeadm printed (regenerate on cp if lost):</span>
+<span class="c">#   kubeadm token create --print-join-command</span>
+sudo kubeadm join $CP_IP:6443 --token &lt;token&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;</code></pre>
+    <div class="callout concept"><div class="callout-title">Why the join needs a token and a hash</div>
+    The <strong>token</strong> authenticates w1 to the control plane. The <strong>CA cert hash</strong> lets w1 verify it joins the right cluster, not a spoofed API server. This is the trust handshake. Tokens expire after 24h by default, so you regenerate rather than reuse: <code>kubeadm token create --print-join-command</code>.</div>
+
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    On cp: <code>kubectl get nodes</code> shows <code>cp</code> and <code>w1</code> both <code>Ready</code> after a minute. You built a cluster from scratch — the guide's kubeadm case, done for real.</div>
+  </div>
+
+  <!-- ================= LAB G ETCD ================= -->
+  <div class="section" id="sec-lab-etcd">
+    <h1>Lab G · etcd Backup &amp; Restore <span class="envtag env-vm">VMs</span></h1>
+    <p class="lead">Run on the <strong>cp</strong> VM. This is a near-guaranteed exam task. A snapshot is a point-in-time copy of the whole cluster state.</p>
+
+    <h3>Quick Reference — Copy &amp; Go</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># 1. Snapshot</span>
+sudo ETCDCTL_API=3 etcdctl snapshot save /opt/snap.db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+<span class="c"># 2. Check it</span>
+sudo ETCDCTL_API=3 etcdctl snapshot status /opt/snap.db --write-out=table
+
+<span class="c"># 3. Restore into a NEW data dir — never overwrite the live one</span>
+sudo ETCDCTL_API=3 etcdctl snapshot restore /opt/snap.db \
+  --data-dir=/var/lib/etcd-restore
+
+<span class="c"># 4. Point the static pod at it (edit the hostPath under etcd-data)</span>
+sudo vi /etc/kubernetes/manifests/etcd.yaml</code></pre>
+    <p class="lead">Full walkthrough below, with verification after each step.</p>
+
+    <h3>G1 · Install etcdctl and take a snapshot</h3>
+    <pre><span class="lang">bash</span><code>sudo apt-get install -y etcd-client       <span class="c"># provides etcdctl</span>
+
+<span class="c"># Create something so you can prove the restore later</span>
+kubectl create deployment before-backup --image=nginx
+
+sudo ETCDCTL_API=3 etcdctl snapshot save /opt/snap.db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+sudo ETCDCTL_API=3 etcdctl snapshot status /opt/snap.db --write-out=table</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    The status table prints a hash, revision, and key count. The snapshot exists at <code>/opt/snap.db</code>.</div>
+
+    <h3>G2 · Change something, then restore</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Make a change that the restore should erase</span>
+kubectl create deployment after-backup --image=nginx
+kubectl get deploy      <span class="c"># both before-backup and after-backup exist</span>
+
+<span class="c"># Restore the snapshot into a NEW data directory</span>
+sudo ETCDCTL_API=3 etcdctl snapshot restore /opt/snap.db \
+  --data-dir=/var/lib/etcd-restore</code></pre>
+
+    <h3>G3 · Point etcd at the restored data</h3>
+    <pre><span class="lang">bash</span><code>sudo vi /etc/kubernetes/manifests/etcd.yaml
+<span class="c"># Change the hostPath volume for etcd-data from /var/lib/etcd</span>
+<span class="c"># to /var/lib/etcd-restore (the 'path:' under volumes, name: etcd-data)</span>
+
+<span class="c"># The kubelet restarts etcd automatically. Watch it come back:</span>
+sudo crictl ps | grep etcd
+kubectl get deploy</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    After etcd restarts, <code>kubectl get deploy</code> shows <code>before-backup</code> but <strong>not</strong> <code>after-backup</code> — the cluster jumped back to the snapshot moment.</div>
+
+    <div class="callout tip"><div class="callout-title">Bonus — Same Idea on KinD</div>
+    You can explore etcd on kind too: <code>docker exec -it cka-control-plane bash</code>, then find the etcd manifest under <code>/etc/kubernetes/manifests/</code>. The certs live in <code>/etc/kubernetes/pki/etcd/</code>. Snapshotting works if you install etcdctl in the container.</div>
+  </div>
+
+  <!-- ================= LAB H UPGRADE ================= -->
+  <div class="section" id="sec-lab-upgrade">
+    <h1>Lab H · Cluster Upgrade <span class="envtag env-vm">VMs</span></h1>
+    <p class="lead">Upgrade one minor version, control plane first. Your cluster is on v1.36; upgrade to v1.37. This follows the order in the <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/" target="_blank">kubeadm upgrade documentation</a> exactly.</p>
+
+    <div class="callout warn"><div class="callout-title">The Drain Sits in the Middle</div>
+    Run the drain <strong>after</strong> <code>kubeadm upgrade apply</code> or <code>kubeadm upgrade node</code>, and <strong>before</strong> you install the new kubelet. Do it in that order here, so your hands learn the order the exam expects.</div>
+
+    <h3>H1 · Read the available versions (on cp)</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Point the package repo at the new minor version</span>
+sudo sed -i 's#/v1.36/#/v1.37/#' /etc/apt/sources.list.d/kubernetes.list
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg --yes
+sudo apt-get update
+
+<span class="c"># Copy the exact package string from this output, e.g. 1.37.0-1.1</span>
+sudo apt-cache madison kubeadm</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>apt-cache madison kubeadm</code> lists <code>1.37.x-*</code> rows. If it still shows only 1.36, the <code>sed</code> did not match. Open the file and check the URL by hand.</div>
+
+    <h3>H2 · Upgrade the control plane (on cp)</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># 1. Upgrade the kubeadm binary</span>
+sudo apt-mark unhold kubeadm &amp;&amp; \
+sudo apt-get update &amp;&amp; sudo apt-get install -y kubeadm='1.37.x-*' &amp;&amp; \
+sudo apt-mark hold kubeadm
+kubeadm version
+
+<span class="c"># 2. Plan, then apply. 'plan' runs on the FIRST control plane node only.</span>
+sudo kubeadm upgrade plan
+sudo kubeadm upgrade apply v1.37.x
+
+<span class="c"># 3. Drain — after the apply, before the kubelet</span>
+kubectl drain cp --ignore-daemonsets --delete-emptydir-data
+
+<span class="c"># 4. Upgrade kubelet and kubectl. kubeadm does NOT do this.</span>
+sudo apt-mark unhold kubelet kubectl &amp;&amp; \
+sudo apt-get update &amp;&amp; sudo apt-get install -y kubelet='1.37.x-*' kubectl='1.37.x-*' &amp;&amp; \
+sudo apt-mark hold kubelet kubectl
+
+<span class="c"># 5. Restart the kubelet, then bring the node back</span>
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+kubectl uncordon cp</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl get nodes</code> shows <code>cp</code> at <code>v1.37.x</code> and <code>Ready</code>, with no <code>SchedulingDisabled</code>. If the kubelet does not start, read <code>journalctl -xeu kubelet</code>.</div>
+
+    <h3>H3 · Upgrade the worker (on w1)</h3>
+    <p>The worker uses <code>kubeadm upgrade node</code>, not <code>kubeadm upgrade apply</code>. There is no <code>plan</code> step. Everything else matches H2.</p>
+    <pre><span class="lang">bash</span><code><span class="c"># On w1 — point the repo at v1.37 and upgrade kubeadm</span>
+sudo sed -i 's#/v1.36/#/v1.37/#' /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-mark unhold kubeadm &amp;&amp; sudo apt-get install -y kubeadm='1.37.x-*' &amp;&amp; sudo apt-mark hold kubeadm
+
+<span class="c"># On w1 — update the local kubelet configuration</span>
+sudo kubeadm upgrade node
+
+<span class="c"># On cp — drain the worker now, not before</span>
+kubectl drain w1 --ignore-daemonsets --delete-emptydir-data
+
+<span class="c"># On w1 — kubelet and kubectl, then restart</span>
+sudo apt-mark unhold kubelet kubectl &amp;&amp; sudo apt-get install -y kubelet='1.37.x-*' kubectl='1.37.x-*' &amp;&amp; sudo apt-mark hold kubelet kubectl
+sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart kubelet
+
+<span class="c"># On cp</span>
+kubectl uncordon w1</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl get nodes</code> shows both nodes at <code>v1.37.x</code> and Ready. You upgraded control plane before worker, one minor at a time — the exam's rules.</div>
+
+    <h3>H4 · Break it on purpose, then recover</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Try to skip a minor version. kubeadm must refuse.</span>
+sudo kubeadm upgrade apply v1.39.0
+
+<span class="c"># Forget the unhold. apt must refuse to change the version.</span>
+sudo apt-mark hold kubeadm
+sudo apt-get install -y kubeadm='1.37.x-*'
+
+<span class="c"># Leave a node cordoned, then find it</span>
+kubectl cordon w1
+kubectl get nodes          <span class="c"># w1 shows SchedulingDisabled</span>
+kubectl uncordon w1</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    You saw three failures that cost real marks: the version skew refusal, the silent <code>apt-mark hold</code> refusal, and the forgotten uncordon. <code>kubeadm upgrade apply</code> is idempotent, so a failed run is safe to repeat.</div>
+  </div>
+
+  <!-- ================= LAB I STATIC PODS ================= -->
+  <div class="section" id="sec-lab-static">
+    <h1>Lab I · Static Pods &amp; a Broken API Server <span class="envtag env-vm">VMs</span></h1>
+    <p class="lead">Run on the <strong>cp</strong> VM. Static pods live on disk and are run directly by the kubelet — this is how the control plane itself starts.</p>
+
+    <h3>I1 · Create a static pod</h3>
+    <pre><span class="lang">bash</span><code><span class="c"># Drop a manifest in the static pod directory</span>
+cat &lt;&lt;'EOF' | sudo tee /etc/kubernetes/manifests/static-web.yaml
+apiVersion: v1
+kind: Pod
+metadata: { name: static-web }
+spec:
+  containers:
+  - { name: web, image: nginx }
+EOF
+sleep 15
+kubectl get pods -A | grep static-web</code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    A pod named <code>static-web-cp</code> appears (the node name is appended). Delete the file and it disappears — the kubelet, not the API server, owns it.</div>
+
+    <h3>I2 · Break and fix the API server</h3>
+    <div class="callout danger"><div class="callout-title">This Intentionally Breaks kubectl</div>
+    Editing the api-server manifest wrong will make <code>kubectl</code> stop working for a minute. That is the lesson: you fix it on disk, not with kubectl. Do this only on the throwaway VM.</div>
+    <pre><span class="lang">bash</span><code>sudo cp /etc/kubernetes/manifests/kube-apiserver.yaml /tmp/apiserver.bak
+<span class="c"># Introduce a bad flag</span>
+sudo sed -i 's/- kube-apiserver/- kube-apiserver\n    - --this-flag-does-not-exist=true/' \
+  /etc/kubernetes/manifests/kube-apiserver.yaml
+sleep 30
+kubectl get nodes                       <span class="c"># fails — api-server is crashing</span>
+
+<span class="c"># Diagnose below kubectl, with the container runtime</span>
+sudo crictl ps -a | grep apiserver
+sudo crictl logs $(sudo crictl ps -a | grep apiserver | head -1 | awk '{print $1}') 2>&amp;1 | tail -5
+
+<span class="c"># Fix: restore the good manifest</span>
+sudo cp /tmp/apiserver.bak /etc/kubernetes/manifests/kube-apiserver.yaml
+sleep 30
+kubectl get nodes                       <span class="c"># works again</span></code></pre>
+    <div class="callout verify"><div class="callout-title">Verify</div>
+    <code>kubectl</code> fails while the flag is bad, and recovers after you restore the file. You diagnosed a downed control plane with <code>crictl</code> — a real exam skill.</div>
+  </div>
+
+  <!-- ================= COMMAND REFERENCE ================= -->
+  <div class="section" id="sec-cheatsheet">
+    <h1>Command Reference</h1>
+    <p class="lead">Kubernetes and Linux commands for the labs above, searchable from anywhere with <strong>&#8984;K</strong> / <strong>Ctrl+K</strong>.</p>
+    <div id="cmd-ref-root"></div>
+  </div>
+
+  <!-- ================= TEARDOWN ================= -->
+  <div class="section" id="sec-teardown">
+    <h1>Reset &amp; Teardown</h1>
+    <p class="lead">Free your resources, or reset one lab without rebuilding everything.</p>
+
+    <h2>Reset a single lab</h2>
+    <pre><span class="lang">bash</span><code><span class="c"># Delete everything in the scratch namespace and recreate it</span>
+kubectl delete namespace lab
+kubectl create namespace lab
+kubectl config set-context --current --namespace=lab</code></pre>
+
+    <h2>Tear down the KinD cluster</h2>
+    <pre><span class="lang">bash</span><code>kind delete cluster --name cka
+<span class="c"># Optional: stop the engine to reclaim all memory</span>
+colima stop
+<span class="c"># Or remove it entirely: colima delete</span></code></pre>
+
+    <h2>Tear down the VMs</h2>
+    <pre><span class="lang">bash</span><code>multipass delete cp w1
+multipass purge</code></pre>
+
+    <div class="callout tip"><div class="callout-title">Rebuild Anytime</div>
+    Everything here is scripted. To start fresh: <code>colima start</code> → recreate the KinD cluster → reinstall add-ons. Keep <code>kind-config.yaml</code> and the add-on commands in a file so a rebuild takes two minutes.</div>
+  </div>
+
+  <!-- ================= FIX THE LAB ================= -->
+  <div class="section" id="sec-fixlab">
+    <h1>Fix the Lab</h1>
+    <p class="lead">Common problems on Apple Silicon and their fixes.</p>
+
+    <table>
+      <tr><th>Symptom</th><th>Cause &amp; Fix</th></tr>
+      <tr><td><code>docker: cannot connect</code> / kind create fails</td><td>The engine is not running. <code>colima start</code>. Confirm with <code>docker info</code>.</td></tr>
+      <tr><td>Nodes stuck <code>NotReady</code></td><td>Calico is not installed or not Ready. Apply the Calico manifest and wait: <code>kubectl -n kube-system rollout status ds/calico-node</code>.</td></tr>
+      <tr><td><code>kubectl top</code> says "Metrics API not available"</td><td>metrics-server needs the kind TLS patch. Reapply the <code>--kubelet-insecure-tls</code> patch and wait a minute.</td></tr>
+      <tr><td>NetworkPolicy does not block anything</td><td>You are on the default CNI. The cluster must be created with <code>disableDefaultCNI: true</code> + Calico. Recreate it.</td></tr>
+      <tr><td><code>curl localhost</code> refused for Ingress</td><td>Port 80 not mapped, or another app uses it. Confirm <code>extraPortMappings</code> in the kind config; free port 80.</td></tr>
+      <tr><td>Slow image pulls</td><td>First pull downloads arm64 images. Wait, or pre-pull with <code>docker pull</code> then <code>kind load docker-image</code>.</td></tr>
+      <tr><td>Preemption does not happen (B3)</td><td>The node is not actually full. Raise filler replicas or CPU requests above the node's Allocatable.</td></tr>
+      <tr><td>multipass VM has no internet</td><td>Restart it: <code>multipass restart cp</code>. On some networks, set a DNS in <code>/etc/resolv.conf</code>.</td></tr>
+    </table>
+
+    <div class="callout concept"><div class="callout-title">The Meta-Skill</div>
+    Every fix above is the same loop you practice in Lab E: read the symptom, ask the layer that knows (engine, CNI, kubelet, events), apply the fix, verify. Debugging your own lab <em>is</em> exam practice.</div>
+  </div>
+
+</div> <!-- end #main -->
+
+<script src="cmd-data.js"></script>
+<script src="cmd-palette.js"></script>
+<script src="ask-claude.js"></script>
+<script src="link-guides.js"></script>
+<script src="sidebar-tree.js"></script>
+<script>
+/* One namespace with the study guide, so a single progress store covers both.
+   The lab prefixes its own keys with 'lab:' — see guideProgKey in link-guides.js. */
+const GUIDE = 'cka';
+const SIDE  = 'lab';
+const titles = {
+  overview:'Overview & How to Use', prereqs:'Prerequisites & Install',
+  create:'Create the KinD Cluster', addons:'Install Add-ons',
+  'lab-workloads':'Lab A · Workloads', 'lab-scheduling':'Lab B · Scheduling',
+  'lab-networking':'Lab C · Networking', 'lab-storage':'Lab D · Storage',
+  'lab-trouble':'Lab E · Troubleshooting', 'lab-rbac':'Lab F · RBAC',
+  'vm-setup':'Provision VMs + kubeadm', 'lab-etcd':'Lab G · etcd Backup/Restore',
+  'lab-upgrade':'Lab H · Cluster Upgrade', 'lab-static':'Lab I · Static Pods & API',
+  cheatsheet:'Command Reference', teardown:'Reset & Teardown', fixlab:'Fix the Lab'
+};
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') === "show('" + id + "')") n.classList.add('active');
+  });
+  document.getElementById('topbar-title').textContent = titles[id] || id;
+  window.scrollTo(0, 0);
+}
+
+/* ---- step progress on every h3, saved in localStorage ---- */
+const PKEY = GUIDE + '-progress';
+const key = (secId, heading) => window.guideProgKey(SIDE, secId, heading);
+function loadProg(){ try { return JSON.parse(localStorage.getItem(PKEY)) || {}; } catch(e){ return {}; } }
+function saveProg(p){ try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch(e){} }
+
+/* One-time move of ticks saved before the two guides shared a store.
+   Old: ckalab-progress { "sec-x::heading": 1 }
+   New: cka-progress    { "lab:sec-x::heading": 1 } */
+function migrateLabProgress(){
+  const DONE = 'cka-lab-progress-merged';
+  try { if (localStorage.getItem(DONE)) return; } catch(e){ return; }
+  let old = {};
+  try { old = JSON.parse(localStorage.getItem('ckalab-progress')) || {}; } catch(e){ old = {}; }
+  const keys = Object.keys(old);
+  if (keys.length) {
+    const p = loadProg();
+    keys.forEach(k => { if (!p['lab:' + k]) p['lab:' + k] = old[k]; });
+    saveProg(p);
+  }
+  try { localStorage.setItem(DONE, '1'); } catch(e){}
+}
+
+function initProgress(){
+  const prog = loadProg();
+  // Skip the command reference — it has no lab checkpoints
+  const skip = new Set(['sec-cheatsheet']);
+  document.querySelectorAll('.section').forEach(sec => {
+    if (skip.has(sec.id)) return;
+    sec.querySelectorAll('h3').forEach(h3 => {
+      const k = key(sec.id, h3.textContent.trim());
+      const wrap = document.createElement('div'); wrap.className = 'h3wrap';
+      const cb = document.createElement('input'); cb.type='checkbox'; cb.className='pchk'; cb.checked = !!prog[k];
+      const lbl = document.createElement('label'); lbl.className='pchk-label'; lbl.textContent='done';
+      h3.parentNode.insertBefore(wrap, h3);
+      wrap.appendChild(cb); wrap.appendChild(h3); wrap.appendChild(lbl);
+      if (cb.checked) wrap.classList.add('done');
+      lbl.addEventListener('click', () => { cb.checked = !cb.checked; toggle(); });
+      cb.addEventListener('change', toggle);
+      function toggle(){
+        const p = loadProg();
+        if (cb.checked){ p[k]=1; wrap.classList.add('done'); } else { delete p[k]; wrap.classList.remove('done'); }
+        saveProg(p); updateBadges();
+      }
+    });
+  });
+  updateBadges();
+}
+function updateBadges(){
+  const prog = loadProg();
+  document.querySelectorAll('.nav-item').forEach(nav => {
+    const m = (nav.getAttribute('onclick')||'').match(/show\('([^']+)'\)/);
+    if (!m) return;
+    if (m[1] === 'cheatsheet') return;
+    const sec = document.getElementById('sec-' + m[1]); if (!sec) return;
+    const h3s = sec.querySelectorAll('h3'); if (!h3s.length) return;
+    let done = 0;
+    h3s.forEach(h3 => { if (prog[key(sec.id, h3.textContent.trim())]) done++; });
+    let b = nav.querySelector('.nav-pct.prog');
+    if (!b){ b = document.createElement('span'); b.className='nav-pct prog'; nav.appendChild(b); }
+    b.textContent = done + '/' + h3s.length;
+  });
+}
+function resetProgress(){
+  if (!confirm('Clear lab progress on this device?\n\nYour study guide progress is kept.')) return;
+  const p = loadProg();
+  Object.keys(p).forEach(k => { if (k.indexOf('lab:') === 0) delete p[k]; });
+  saveProg(p);
+  document.querySelectorAll('.pchk').forEach(cb => cb.checked = false);
+  document.querySelectorAll('.h3wrap.done').forEach(w => w.classList.remove('done'));
+  updateBadges();
+}
+document.addEventListener('DOMContentLoaded', () => {
+  migrateLabProgress();
+  initCmdPalette({ guide: GUIDE, mount: '#cmd-ref-root' });
+  initProgress();
+  initAskClaude({ guide: GUIDE });
+  initGuideLinks({ side: SIDE });
+});
+</script>
+</body>
+</html>

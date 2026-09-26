@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CKS Study Handbook</title>
+<style>
+:root {
+  --sb:#0f172a;--sb-text:#94a3b8;--bg:#f8fafc;--white:#fff;--code-bg:#0d1117;
+  --border:#e2e8f0;--text:#1e293b;--muted:#64748b;
+  --blue:#3b82f6;--green:#22c55e;--yellow:#f59e0b;--red:#ef4444;--purple:#a855f7;--orange:#f97316;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;display:flex;background:var(--bg);color:var(--text);}
+#sidebar{width:272px;min-height:100vh;background:var(--sb);position:fixed;top:0;left:0;overflow-y:auto;z-index:100;}
+#sidebar::-webkit-scrollbar{width:4px;}
+#sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px;}
+.sb-header{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.07);}
+.sb-header h1{color:#fff;font-size:17px;font-weight:800;letter-spacing:-.3px;}
+.sb-header p{color:var(--sb-text);font-size:12px;margin-top:3px;}
+.sb-badges{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.sbadge{padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;}
+.sbadge-b{background:rgba(59,130,246,.2);color:#60a5fa;}
+.sbadge-g{background:rgba(34,197,94,.2);color:#4ade80;}
+.sbadge-r{background:rgba(239,68,68,.2);color:#f87171;}
+.sbadge-o{background:rgba(249,115,22,.2);color:#fb923c;}
+.sb-group{padding:8px 0;}
+.sb-group-title{padding:8px 18px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(148,163,184,.4);}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;color:var(--sb-text);font-size:13.5px;border-left:3px solid transparent;transition:all .12s;}
+.nav-item:hover{background:rgba(255,255,255,.04);color:#fff;}
+.nav-item.active{background:rgba(239,68,68,.1);color:#fca5a5;border-left-color:var(--red);}
+.nav-icon{width:18px;text-align:center;font-size:13px;}
+.nav-pct{margin-left:auto;font-size:10px;padding:1px 7px;border-radius:99px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.4);}
+.nav-toggle{margin-left:6px;font-size:9px;color:rgba(148,163,184,.5);cursor:pointer;padding:2px 4px;transition:transform .15s;}
+.nav-item.nav-expanded .nav-toggle{transform:rotate(90deg);}
+.nav-subtree{display:none;padding:2px 0 4px;}
+.nav-item.nav-expanded + .nav-subtree{display:block;}
+.nav-subitem{padding:6px 18px 6px 44px;font-size:12px;color:var(--sb-text);cursor:pointer;border-left:3px solid transparent;}
+.nav-subitem:hover{background:rgba(255,255,255,.04);color:#fff;}
+#main{margin-left:272px;flex:1;}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:12px 44px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:50;}
+.topbar-label{font-size:12px;color:var(--muted);}
+.topbar-title{font-size:13px;font-weight:600;color:var(--text);}
+.section{display:none;max-width:860px;margin:0 auto;padding:40px 44px 80px;}
+.section.active{display:block;}
+.section h1{font-size:30px;font-weight:800;color:#0f172a;margin-bottom:6px;letter-spacing:-.5px;}
+.lead{font-size:15.5px;color:var(--muted);line-height:1.65;margin-bottom:28px;}
+.section h2{font-size:20px;font-weight:700;color:#0f172a;margin:36px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--border);}
+.section h3{font-size:16px;font-weight:600;color:#0f172a;margin:22px 0 8px;}
+.section h4{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:18px 0 8px;}
+.section p{line-height:1.72;margin-bottom:12px;}
+.section ul,.section ol{margin-left:22px;margin-bottom:12px;line-height:1.8;}
+.section li{margin-bottom:3px;}
+a{color:var(--blue);text-decoration:none;}
+a:hover{text-decoration:underline;}
+code{background:#f1f5f9;color:#0f172a;padding:2px 6px;border-radius:4px;font-family:'SF Mono','Cascadia Code',monospace;font-size:12.5px;}
+pre{background:var(--code-bg);border-radius:10px;padding:18px 20px;overflow-x:auto;margin:14px 0;border:1px solid rgba(255,255,255,.08);position:relative;}
+pre code{color:#e2e8f0;font-family:'SF Mono','Cascadia Code','Fira Code',monospace;font-size:13px;line-height:1.7;background:none;padding:0;}
+.lang{position:absolute;top:10px;right:14px;font-size:10px;color:rgba(255,255,255,.25);font-family:monospace;text-transform:uppercase;letter-spacing:.5px;}
+.c{color:#6b7280;}.k{color:#60a5fa;}.v{color:#4ade80;}.n{color:#fbbf24;}.t{color:#c084fc;}
+.callout{padding:14px 18px;border-radius:8px;margin:14px 0;border-left:4px solid;font-size:14px;line-height:1.65;}
+.callout-title{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.tip{background:#f0fdf4;border-color:#22c55e;color:#14532d;}
+.warn{background:#fffbeb;border-color:#f59e0b;color:#78350f;}
+.info{background:#eff6ff;border-color:#3b82f6;color:#1e3a8a;}
+.danger{background:#fef2f2;border-color:#ef4444;color:#7f1d1d;}
+.exam{background:#fdf4ff;border-color:#a855f7;color:#4a044e;}
+.sec-callout{background:#fff7ed;border-color:#f97316;color:#7c2d12;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin:16px 0;}
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.card-num{font-size:26px;font-weight:800;margin-bottom:3px;}
+.card-label{font-size:13px;color:var(--muted);line-height:1.4;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
+th{background:#f8fafc;padding:9px 13px;text-align:left;font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border-bottom:2px solid var(--border);}
+td{padding:9px 13px;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:hover td{background:#f9fafb;}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11.5px;font-weight:500;margin:2px;}
+.tb{background:#dbeafe;color:#1d4ed8;}.tg{background:#dcfce7;color:#15803d;}
+.ty{background:#fef9c3;color:#854d0e;}.tr{background:#fee2e2;color:#991b1b;}
+.tp{background:#f3e8ff;color:#6b21a8;}.to{background:#fff7ed;color:#9a3412;}
+.timeline{display:flex;flex-direction:column;gap:0;margin:16px 0;}
+.tl-item{display:flex;gap:18px;position:relative;}
+.tl-item::before{content:'';position:absolute;left:18px;top:38px;bottom:0;width:2px;background:var(--border);}
+.tl-item:last-child::before{display:none;}
+.tl-dot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;z-index:1;margin-top:1px;}
+.tl-body{padding-bottom:28px;flex:1;}
+.tl-body h3{margin-top:7px;margin-bottom:5px;}
+.tl-body p{font-size:13.5px;color:var(--muted);}
+.steps{counter-reset:step;list-style:none;margin-left:0;}
+.steps li{counter-increment:step;display:flex;gap:12px;margin-bottom:14px;}
+.steps li::before{content:counter(step);background:var(--red);color:#fff;font-weight:700;font-size:12px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.tool-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:600;background:#0f172a;color:#e2e8f0;margin:2px;}
+
+/* CONCEPT CALLOUT ("Understand This") */
+.concept { background:#eef2ff; border-color:#6366f1; color:#312e81; }
+
+/* DIAGRAMS (inline SVG) */
+figure.diagram { margin:20px 0; padding:20px 18px 12px; background:var(--white); border:1px solid var(--border); border-radius:12px; overflow-x:auto; }
+figure.diagram svg { display:block; width:100%; height:auto; margin:0 auto; }
+figure.diagram figcaption { margin-top:12px; font-size:12.5px; color:var(--muted); text-align:center; font-style:italic; }
+.diagram svg text { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif; }
+.dg-box { fill:var(--white); stroke:var(--border); stroke-width:1.5; }
+.dg-lbl { fill:var(--text); font-size:12px; font-weight:600; }
+.dg-sub { fill:var(--muted); font-size:10.5px; }
+.dg-edge { stroke:var(--muted); stroke-width:1.6; fill:none; }
+.dg-edge-lbl { fill:var(--muted); font-size:10px; }
+
+/* PROGRESS CHECKBOX (on h2) */
+.h2wrap { display:flex; align-items:center; gap:10px; margin:36px 0 12px; padding-bottom:8px; border-bottom:2px solid var(--border); }
+.h2wrap h2 { margin:0; padding:0; border:none; flex:1; }
+.pchk { width:20px; height:20px; flex-shrink:0; cursor:pointer; accent-color:var(--green); }
+.pchk-label { font-size:11px; color:var(--muted); cursor:pointer; user-select:none; white-space:nowrap; }
+.h2wrap.done h2 { color:var(--green); }
+
+/* PRACTICE CASES (details/summary) */
+details.pcase { border:1px solid var(--border); border-left:4px solid var(--purple); border-radius:8px; margin:12px 0; background:var(--white); overflow:hidden; }
+details.pcase > summary { padding:13px 18px; cursor:pointer; font-size:14px; font-weight:600; color:var(--text); list-style:none; display:flex; align-items:center; gap:10px; }
+details.pcase > summary::-webkit-details-marker { display:none; }
+details.pcase > summary::before { content:'▶'; font-size:10px; color:var(--purple); transition:transform .15s; }
+details.pcase[open] > summary::before { transform:rotate(90deg); }
+details.pcase > summary:hover { background:#faf5ff; }
+.pcase-body { padding:2px 18px 14px; border-top:1px solid var(--border); }
+.pcase-body p:first-child { margin-top:12px; }
+
+/* QUIZ */
+.quiz-bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:14px 0 20px; }
+.quiz-btn { padding:8px 16px; border-radius:7px; border:none; background:var(--blue); color:#fff; font-size:13px; font-weight:600; cursor:pointer; }
+.quiz-btn.ghost { background:var(--white); color:var(--text); border:1px solid var(--border); }
+.quiz-btn:hover { opacity:.9; }
+.quiz-timer { font-family:'SF Mono',monospace; font-size:15px; font-weight:700; padding:6px 12px; border-radius:7px; background:#0f172a; color:#4ade80; }
+.quiz-timer.low { color:#f87171; }
+.quiz-progress { font-size:13px; color:var(--muted); }
+.quiz-card { border:1px solid var(--border); border-radius:12px; padding:24px; background:var(--white); min-height:180px; display:flex; flex-direction:column; gap:16px; }
+.quiz-cat { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--purple); }
+.quiz-q { font-size:17px; font-weight:600; line-height:1.5; color:#0f172a; }
+.quiz-a { font-size:14px; line-height:1.7; color:var(--text); border-top:1px dashed var(--border); padding-top:14px; }
+.quiz-a code { font-size:12.5px; }
+.quiz-a.hidden { display:none; }
+.quiz-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:auto; }
+.quiz-known { padding:2px 10px; border-radius:99px; font-size:11px; font-weight:600; }
+.quiz-known.k { background:#dcfce7; color:#15803d; }
+.quiz-known.r { background:#fee2e2; color:#991b1b; }
+
+/* SIDEBAR RESET */
+.sb-footer { padding:14px 18px 22px; border-top:1px solid rgba(255,255,255,.07); margin-top:8px; }
+.sb-reset { color:var(--sb-text); font-size:12px; cursor:pointer; }
+.sb-reset:hover { color:#f87171; }
+.nav-pct.prog { background:rgba(34,197,94,.18); color:#4ade80; }
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="sb-header">
+    <h1>CKS Handbook</h1>
+    <p>Certified Kubernetes Security Specialist</p>
+    <div class="sb-badges">
+      <span class="sbadge sbadge-r">Requires CKA</span>
+      <span class="sbadge sbadge-b">2h Exam</span>
+      <span class="sbadge sbadge-g">67% Pass</span>
+    </div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-title">Start Here</div>
+    <div class="nav-item active" onclick="show('overview')"><span class="nav-icon">🎯</span> Overview &amp; Exam Info</div>
+    <div class="nav-item" onclick="show('roadmap')"><span class="nav-icon">🗺️</span> Learning Roadmap</div>
+  </div>
+  <div class="sb-group" data-tree>
+    <div class="sb-group-title">Exam Domains</div>
+    <div class="nav-item" onclick="show('cluster-setup')"><span class="nav-icon">🔒</span> Cluster Setup <span class="nav-pct">10%</span></div>
+    <div class="nav-item" onclick="show('cluster-hardening')"><span class="nav-icon">🛡️</span> Cluster Hardening <span class="nav-pct">15%</span></div>
+    <div class="nav-item" onclick="show('system-hardening')"><span class="nav-icon">🐧</span> System Hardening <span class="nav-pct">15%</span></div>
+    <div class="nav-item" onclick="show('microservice')"><span class="nav-icon">📦</span> Microservice Vulns <span class="nav-pct">20%</span></div>
+    <div class="nav-item" onclick="show('supply-chain')"><span class="nav-icon">🔗</span> Supply Chain Security <span class="nav-pct">20%</span></div>
+    <div class="nav-item" onclick="show('runtime')"><span class="nav-icon">👁️</span> Runtime Security <span class="nav-pct">20%</span></div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-title">Progress</div>
+    <div class="nav-item" onclick="show('progress')"><span class="nav-icon">📊</span> My Progress</div>
+  </div>
+
+  <div class="sb-group">
+    <div class="sb-group-title">Practice</div>
+    <div class="nav-item" onclick="show('practice')"><span class="nav-icon">🧪</span> Practice Cases</div>
+    <div class="nav-item" onclick="show('quiz')"><span class="nav-icon">🎴</span> Self-Quiz</div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-title">Ask</div>
+    <div class="nav-item" onclick="askClaudeOpen()"><span class="nav-icon">💬</span> Ask Claude <span class="nav-pct">⌘J</span></div>
+  </div>
+
+  <div class="sb-group">
+    <div class="sb-group-title">Reference</div>
+    <div class="nav-item" onclick="show('tools')"><span class="nav-icon">🔧</span> Tools Quick Reference</div>
+    <div class="nav-item" onclick="show('cheatsheet')"><span class="nav-icon">📋</span> Command Reference</div>
+    <div class="nav-item" onclick="show('examday')"><span class="nav-icon">🏆</span> Exam Day Tips</div>
+  </div>
+  <div class="sb-footer">
+    <span class="sb-reset" onclick="resetProgress()">↺ Reset all progress</span>
+  </div>
+</nav>
+
+<div id="main">
+  <div class="topbar">
+    <span class="topbar-label">CKS Study Guide</span>
+    <span class="topbar-label">/</span>
+    <span class="topbar-title" id="topbar-title">Overview &amp; Exam Info</span>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="section active" id="sec-overview">
+    <h1>CKS Exam Overview</h1>
+    <p class="lead">The Certified Kubernetes Security Specialist (CKS) is a hands-on exam testing your ability to harden Kubernetes clusters and workloads. It <strong>requires a valid CKA</strong> — complete that first.</p>
+
+    <h2>Exam at a Glance</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-num" style="color:var(--red)">CKA</div><div class="card-label">Prerequisite (must be valid)</div></div>
+      <div class="card"><div class="card-num" style="color:var(--blue)">2 hrs</div><div class="card-label">Duration</div></div>
+      <div class="card"><div class="card-num" style="color:var(--green)">67%</div><div class="card-label">Passing score</div></div>
+      <div class="card"><div class="card-num" style="color:var(--yellow)">~16</div><div class="card-label">Task questions</div></div>
+      <div class="card"><div class="card-num" style="color:var(--purple)">1</div><div class="card-label">Free retake</div></div>
+      <div class="card"><div class="card-num" style="color:var(--orange)">2yr</div><div class="card-label">Cert validity</div></div>
+    </div>
+
+    <div class="callout danger"><div class="callout-title">Prerequisite</div>
+    You must hold an <strong>active CKA certificate</strong> at time of exam registration. The CKA must not have expired. There is no workaround for this requirement.</div>
+
+    <h2>Exam Domains &amp; Weights</h2>
+    <table>
+      <tr><th>Domain</th><th>Weight</th><th>Key Tools / Concepts</th></tr>
+      <tr><td>Monitoring, Logging &amp; Runtime Security</td><td><span class="tag tr">20%</span></td><td>Falco, audit logs, immutability, syscall analysis</td></tr>
+      <tr><td>Minimize Microservice Vulnerabilities</td><td><span class="tag tr">20%</span></td><td>SecurityContext, OPA/Gatekeeper, Pod Security Admission, mTLS, sandboxing</td></tr>
+      <tr><td>Supply Chain Security</td><td><span class="tag tr">20%</span></td><td>Trivy, image signing, admission controllers, Dockerfile best practices</td></tr>
+      <tr><td>Cluster Hardening</td><td><span class="tag ty">15%</span></td><td>RBAC, ServiceAccount tokens, API server flags, K8s updates</td></tr>
+      <tr><td>System Hardening</td><td><span class="tag ty">15%</span></td><td>AppArmor, seccomp, OS footprint reduction, kernel hardening</td></tr>
+      <tr><td>Cluster Setup</td><td><span class="tag tb">10%</span></td><td>CIS benchmark, kube-bench, TLS ingress, node metadata protection</td></tr>
+    </table>
+
+    <h2>How CKS Differs from CKA</h2>
+    <p>CKA tests <em>can you operate a cluster</em>. CKS tests <em>can you make it secure</em>. Expect questions like:</p>
+    <ul>
+      <li>Fix this pod so it runs as non-root with a read-only filesystem</li>
+      <li>Write a Falco rule to detect shell spawning inside containers</li>
+      <li>Scan this image for critical CVEs and replace it with a safer version</li>
+      <li>Create a NetworkPolicy that denies all egress except DNS</li>
+      <li>Enable audit logging and capture specific API server events</li>
+      <li>Apply an AppArmor profile to a pod</li>
+    </ul>
+
+    <h2>Official Resources</h2>
+    <ul>
+      <li><a href="https://training.linuxfoundation.org/certification/certified-kubernetes-security-specialist/" target="_blank">Official CKS Page — Linux Foundation</a></li>
+      <li><a href="https://github.com/cncf/curriculum" target="_blank">CNCF CKS Curriculum (exact topic list)</a></li>
+      <li><a href="https://killer.sh/" target="_blank">killer.sh — CKS exam simulator (included free with registration)</a></li>
+      <li><a href="https://github.com/walidshaari/Certified-Kubernetes-Security-Specialist" target="_blank">CKS Study Resources on GitHub (walidshaari)</a></li>
+      <li><a href="https://falco.org/docs/" target="_blank">Falco Documentation</a></li>
+      <li><a href="https://aquasecurity.github.io/trivy/" target="_blank">Trivy Documentation</a></li>
+    </ul>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section" id="sec-roadmap">
+    <h1>Learning Roadmap</h1>
+    <p class="lead">CKS builds directly on CKA knowledge. Assume you know Kubernetes well — this guide focuses on the security layer on top. Budget <strong>4–6 weeks</strong> with CKA already solid.</p>
+
+    <div class="callout warn"><div class="callout-title">Required Background</div>
+    Before starting CKS, you should be comfortable with: RBAC, NetworkPolicies, kubectl, YAML editing, Linux command line, and basic container security concepts (namespaces, capabilities, syscalls).</div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#fee2e2;color:#991b1b">1</div>
+        <div class="tl-body">
+          <h3>Phase 1 — Security Fundamentals <span class="tag tr">3–4 days</span></h3>
+          <p>Linux security model (DAC, MAC, capabilities), container security model, attack vectors in K8s (the 4Cs: Cloud, Cluster, Container, Code). Read the <a href="https://kubernetes.io/docs/concepts/security/overview/" target="_blank">K8s security overview</a>.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#fef9c3;color:#854d0e">2</div>
+        <div class="tl-body">
+          <h3>Phase 2 — Cluster Hardening &amp; Setup <span class="tag ty">1 week</span></h3>
+          <p>API server security flags, RBAC hardening, ServiceAccount token restrictions, CIS benchmark with kube-bench, etcd encryption at rest, TLS everywhere.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#f3e8ff;color:#6b21a8">3</div>
+        <div class="tl-body">
+          <h3>Phase 3 — System &amp; Pod Hardening <span class="tag tp">1 week</span></h3>
+          <p>SecurityContext deep dive, Pod Security Admission, AppArmor profiles, seccomp profiles, container sandboxes (gVisor/Kata). Practice applying security contexts to existing pods.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#dbeafe;color:#1d4ed8">4</div>
+        <div class="tl-body">
+          <h3>Phase 4 — Supply Chain &amp; Admission <span class="tag tb">1 week</span></h3>
+          <p>Trivy image scanning, OPA/Gatekeeper policies, ImagePolicyWebhook, admission controllers, Dockerfile hardening, image signing concepts.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#dcfce7;color:#15803d">5</div>
+        <div class="tl-body">
+          <h3>Phase 5 — Runtime Security &amp; Observability <span class="tag tg">1 week</span></h3>
+          <p>Falco rules and alerts, Kubernetes audit policies, detecting runtime threats, behavioral analysis, immutable containers.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#0f172a;color:#94a3b8">6</div>
+        <div class="tl-body">
+          <h3>Phase 6 — Exam Simulation <span class="tag to">1 week</span></h3>
+          <p>killer.sh simulator (twice), timed practice, identify weak areas, review docs navigation speed. Focus on fixing intentionally broken security configs.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>The 4Cs of Cloud Native Security</h2>
+    <p>Kubernetes security is built in <strong>layers</strong>, one inside the next: <strong>Cloud → Cluster → Container → Code</strong>. Each layer sits inside the one before it, so a weak outer layer exposes everything within. The rule is <strong>defense in depth</strong>: secure every layer, and assume the layer outside it may already be breached. You cannot fix bad code with a firewall, and you cannot fix an open cluster with clean code — you need all four.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 420 300" role="img" aria-label="The 4Cs as concentric layers: Cloud contains Cluster contains Container contains Code">
+        <rect x="20" y="20" width="380" height="260" rx="14" fill="#eff6ff" stroke="#3b82f6"/>
+        <text x="210" y="42" text-anchor="middle" class="dg-lbl" fill="#1d4ed8">Cloud — infra, IAM, network</text>
+        <rect x="60" y="58" width="300" height="204" rx="12" fill="#f0fdf4" stroke="#22c55e"/>
+        <text x="210" y="80" text-anchor="middle" class="dg-lbl" fill="#15803d">Cluster — API, RBAC, policies</text>
+        <rect x="100" y="96" width="220" height="148" rx="10" fill="#fef9c3" stroke="#f59e0b"/>
+        <text x="210" y="118" text-anchor="middle" class="dg-lbl" fill="#854d0e">Container — image, caps, seccomp</text>
+        <rect x="140" y="134" width="140" height="92" rx="8" fill="#fee2e2" stroke="#ef4444"/>
+        <text x="210" y="176" text-anchor="middle" class="dg-lbl" fill="#991b1b">Code</text>
+        <text x="210" y="196" text-anchor="middle" class="dg-sub" fill="#991b1b">app, secrets, deps</text>
+      </svg>
+      <figcaption>C1 · The 4Cs. Secure each layer; a breach of an outer layer must not hand over the inner ones.</figcaption>
+    </figure>
+    <table>
+      <tr><th>Layer</th><th>What It Covers</th><th>CKS Focus</th></tr>
+      <tr><td><strong>Cloud</strong></td><td>Infrastructure, IAM, network ACLs</td><td>Node metadata protection, cloud provider access</td></tr>
+      <tr><td><strong>Cluster</strong></td><td>K8s API, RBAC, network policies</td><td>Hardening API server, etcd, admission controllers</td></tr>
+      <tr><td><strong>Container</strong></td><td>Container runtime, image, capabilities</td><td>SecurityContext, AppArmor, seccomp, sandboxing</td></tr>
+      <tr><td><strong>Code</strong></td><td>Application code, libraries, secrets</td><td>Static analysis, secret management, mTLS</td></tr>
+    </table>
+
+    <h2>Which Tool Defends Which Layer</h2>
+    <p>CKS throws many tools at you. They stop feeling random once you see <em>where</em> each one works. Map every tool to the layer it protects, and you know which tool a task needs.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 300" role="img" aria-label="Security tools mapped to the layer they defend, from cluster config down to runtime">
+        <rect class="dg-box" x="20" y="20" width="680" height="42" rx="8" stroke="#3b82f6"/>
+        <text class="dg-lbl" x="40" y="46" fill="#1d4ed8">Cluster config</text>
+        <text class="dg-sub" x="360" y="46" text-anchor="middle">kube-bench (CIS audit) · RBAC least-privilege · etcd encryption</text>
+        <rect class="dg-box" x="20" y="74" width="680" height="42" rx="8" stroke="#f59e0b"/>
+        <text class="dg-lbl" x="40" y="100" fill="#854d0e">Admission</text>
+        <text class="dg-sub" x="360" y="100" text-anchor="middle">Pod Security Admission · OPA/Gatekeeper · ImagePolicyWebhook</text>
+        <rect class="dg-box" x="20" y="128" width="680" height="42" rx="8" stroke="#a855f7"/>
+        <text class="dg-lbl" x="40" y="154" fill="#6b21a8">Supply chain</text>
+        <text class="dg-sub" x="360" y="154" text-anchor="middle">Trivy (scan images) · Cosign (sign/verify) · minimal base images</text>
+        <rect class="dg-box" x="20" y="182" width="680" height="42" rx="8" stroke="#22c55e"/>
+        <text class="dg-lbl" x="40" y="208" fill="#15803d">Kernel / container</text>
+        <text class="dg-sub" x="360" y="208" text-anchor="middle">AppArmor (files) · seccomp (syscalls) · capabilities · runtime sandbox</text>
+        <rect class="dg-box" x="20" y="236" width="680" height="42" rx="8" stroke="#ef4444"/>
+        <text class="dg-lbl" x="40" y="262" fill="#991b1b">Runtime</text>
+        <text class="dg-sub" x="360" y="262" text-anchor="middle">Falco (detect syscalls) · audit logs · read-only root filesystem</text>
+      </svg>
+      <figcaption>C3 · Defense in depth. Each row is a layer; each tool defends that layer.</figcaption>
+    </figure>
+  </div>
+
+  <!-- CLUSTER SETUP -->
+  <div class="section" id="sec-cluster-setup">
+    <h1>Cluster Setup</h1>
+    <p class="lead"><span class="tag tb">10% of exam</span> — CIS benchmarks, TLS for Ingress, protecting node metadata, verifying platform binaries, and securing the GUI.</p>
+
+    <h2>1. CIS Benchmark with kube-bench</h2>
+    <p><strong>kube-bench</strong> audits your cluster against the CIS Kubernetes Benchmark — the industry standard for K8s security configuration.</p>
+    <pre><span class="lang">bash</span><code><span class="c"># Run kube-bench on control plane</span>
+kubectl apply -f https://raw.githubusercontent.com/aquasecurity/kube-bench/main/job-master.yaml
+kubectl logs job/kube-bench-master
+
+<span class="c"># Run on a worker node</span>
+kubectl apply -f https://raw.githubusercontent.com/aquasecurity/kube-bench/main/job-node.yaml
+kubectl logs job/kube-bench-node
+
+<span class="c"># Or run directly on the host</span>
+kube-bench run --targets master
+kube-bench run --targets node</code></pre>
+
+    <p>kube-bench outputs <span style="color:var(--green);font-weight:700">[PASS]</span> / <span style="color:var(--red);font-weight:700">[FAIL]</span> / <span style="color:var(--yellow);font-weight:700">[WARN]</span> for each check. Common failures:</p>
+    <table>
+      <tr><th>Check</th><th>Fix</th></tr>
+      <tr><td>Anonymous auth enabled on API server</td><td>Set <code>--anonymous-auth=false</code></td></tr>
+      <tr><td>Insecure port open</td><td>Set <code>--insecure-port=0</code></td></tr>
+      <tr><td>etcd not using TLS</td><td>Set <code>--cert-file</code> and <code>--key-file</code> on etcd</td></tr>
+      <tr><td>kubelet anonymous auth</td><td>Set <code>authentication.anonymous.enabled: false</code> in kubelet config</td></tr>
+      <tr><td>Audit logs not enabled</td><td>Set <code>--audit-log-path</code> on API server</td></tr>
+    </table>
+
+    <div class="callout info"><div class="callout-title">Reference</div>
+    <a href="https://github.com/aquasecurity/kube-bench" target="_blank">kube-bench on GitHub</a> &nbsp;|&nbsp;
+    <a href="https://www.cisecurity.org/benchmark/kubernetes" target="_blank">CIS Kubernetes Benchmark</a></div>
+
+    <h2>2. TLS for Ingress</h2>
+    <pre><span class="lang">bash</span><code><span class="c"># Create a TLS secret from certificate files</span>
+kubectl create secret tls my-tls-secret \
+  --cert=tls.crt \
+  --key=tls.key \
+  -n prod
+
+<span class="c"># Or generate self-signed cert for testing</span>
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout tls.key -out tls.crt \
+  -subj "/CN=myapp.example.com/O=myapp"
+
+kubectl create secret tls myapp-tls --cert=tls.crt --key=tls.key</code></pre>
+
+    <pre><span class="lang">yaml</span><code><span class="k">apiVersion</span>: <span class="v">networking.k8s.io/v1</span>
+<span class="k">kind</span>: <span class="t">Ingress</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="v">secure-ingress</span>
+  <span class="k">annotations</span>:
+    <span class="k">nginx.ingress.kubernetes.io/ssl-redirect</span>: <span class="v">"true"</span>
+<span class="k">spec</span>:
+  <span class="k">tls</span>:
+  - <span class="k">hosts</span>: [<span class="v">myapp.example.com</span>]
+    <span class="k">secretName</span>: <span class="v">myapp-tls</span>   <span class="c"># must be in same namespace as Ingress</span>
+  <span class="k">rules</span>:
+  - <span class="k">host</span>: <span class="v">myapp.example.com</span>
+    <span class="k">http</span>:
+      <span class="k">paths</span>:
+      - <span class="k">path</span>: <span class="v">/</span>
+        <span class="k">pathType</span>: <span class="v">Prefix</span>
+        <span class="k">backend</span>:
+          <span class="k">service</span>:
+            <span class="k">name</span>: <span class="v">frontend</span>
+            <span class="k">port</span>:
+              <span class="k">number</span>: <span class="n">80</span></code></pre>
+
+    <h2>3. Protect Node Metadata</h2>
+    <p>Cloud provider nodes expose a metadata API (e.g., <code>169.254.169.254</code> on AWS/GCP). Pods can reach it and potentially steal instance credentials. Block this with NetworkPolicy:</p>
+    <pre><span class="lang">yaml</span><code><span class="k">apiVersion</span>: <span class="v">networking.k8s.io/v1</span>
+<span class="k">kind</span>: <span class="t">NetworkPolicy</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="v">block-metadata</span>
+<span class="k">spec</span>:
+  <span class="k">podSelector</span>: {}   <span class="c"># all pods</span>
+  <span class="k">policyTypes</span>: [<span class="v">Egress</span>]
+  <span class="k">egress</span>:
+  - <span class="k">to</span>:
+    - <span class="k">ipBlock</span>:
+        <span class="k">cidr</span>: <span class="v">0.0.0.0/0</span>
+        <span class="k">except</span>:
+        - <span class="v">169.254.169.254/32</span>   <span class="c"># AWS/GCP metadata endpoint</span></code></pre>
+
+    <h2>4. Verify Platform Binaries</h2>
+    <pre><code><span class="c"># Download kubectl and verify checksum</span>
+curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl.sha256"
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+
+<span class="c"># Verify a running binary hasn't been tampered with</span>
+sha256sum /usr/bin/kubectl
+<span class="c"># Compare against published hash from kubernetes.io</span></code></pre>
+  </div>
+
+  <!-- CLUSTER HARDENING -->
+  <div class="section" id="sec-cluster-hardening">
+    <h1>Cluster Hardening</h1>
+    <p class="lead"><span class="tag ty">15% of exam</span> — Restricting API access, RBAC least privilege, ServiceAccount hardening, API server security flags, and etcd encryption at rest.</p>
+
+    <h2>1. API Server Hardening</h2>
+    <p>The API server manifest is at <code>/etc/kubernetes/manifests/kube-apiserver.yaml</code>. These flags matter for CKS:</p>
+    <table>
+      <tr><th>Flag</th><th>Secure Value</th><th>Why</th></tr>
+      <tr><td><code>--anonymous-auth</code></td><td><code>false</code></td><td>Block unauthenticated requests</td></tr>
+      <tr><td><code>--insecure-port</code></td><td><code>0</code></td><td>Disable unencrypted HTTP port</td></tr>
+      <tr><td><code>--authorization-mode</code></td><td><code>Node,RBAC</code></td><td>Use RBAC + Node authorization (never AlwaysAllow)</td></tr>
+      <tr><td><code>--enable-admission-plugins</code></td><td>See below</td><td>Enable security admission controllers</td></tr>
+      <tr><td><code>--audit-log-path</code></td><td><code>/var/log/k8s-audit.log</code></td><td>Enable audit logging</td></tr>
+      <tr><td><code>--profiling</code></td><td><code>false</code></td><td>Disable profiling endpoints</td></tr>
+      <tr><td><code>--service-account-lookup</code></td><td><code>true</code></td><td>Validate SA tokens still exist in etcd</td></tr>
+    </table>
+
+    <h3>Key Admission Controllers</h3>
+    <div class="callout concept"><div class="callout-title">The Admission Chain — Where PSA, OPA &amp; Image Policy Plug In</div>
+    Every write request runs a gauntlet inside the API server before it is saved. First <strong>authentication</strong> (who are you?), then <strong>authorization</strong> (RBAC — are you allowed?), then <strong>admission control</strong> in two phases: <strong>mutating</strong> admission can change the object (add a default, inject a sidecar), then <strong>validating</strong> admission can accept or reject it. Only then does it reach etcd. This one pipeline is where most CKS controls live: <strong>Pod Security Admission</strong>, <strong>OPA/Gatekeeper</strong>, and <strong>image policy</strong> are all validating admission steps. Understand this chain and every one of those topics clicks into place.</div>
+    <figure class="diagram">
+      <svg viewBox="0 0 760 170" role="img" aria-label="API server request pipeline: authentication, authorization, mutating admission, validating admission, then etcd">
+        <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#64748b"/></marker></defs>
+        <rect class="dg-box" x="12" y="60" width="120" height="56" rx="8"/>
+        <text class="dg-sub" x="72" y="84" text-anchor="middle">request</text>
+        <text class="dg-sub" x="72" y="100" text-anchor="middle">(kubectl)</text>
+        <rect class="dg-box" x="150" y="60" width="120" height="56" rx="8"/>
+        <text class="dg-lbl" x="210" y="84" text-anchor="middle">authn</text>
+        <text class="dg-sub" x="210" y="100" text-anchor="middle">who are you?</text>
+        <rect class="dg-box" x="288" y="60" width="120" height="56" rx="8"/>
+        <text class="dg-lbl" x="348" y="84" text-anchor="middle">authz</text>
+        <text class="dg-sub" x="348" y="100" text-anchor="middle">RBAC allow?</text>
+        <rect class="dg-box" x="426" y="60" width="130" height="56" rx="8" stroke="#a855f7"/>
+        <text class="dg-lbl" x="491" y="80" text-anchor="middle">mutating</text>
+        <text class="dg-sub" x="491" y="96" text-anchor="middle">may change</text>
+        <text class="dg-sub" x="491" y="109" text-anchor="middle">the object</text>
+        <rect class="dg-box" x="574" y="60" width="130" height="56" rx="8" stroke="#ef4444" stroke-width="2"/>
+        <text class="dg-lbl" x="639" y="80" text-anchor="middle">validating</text>
+        <text class="dg-sub" x="639" y="96" text-anchor="middle">PSA · OPA ·</text>
+        <text class="dg-sub" x="639" y="109" text-anchor="middle">image policy</text>
+        <rect class="dg-box" x="574" y="10" width="130" height="34" rx="8" stroke="#22c55e"/>
+        <text class="dg-sub" x="639" y="32" text-anchor="middle">etcd (saved)</text>
+        <line class="dg-edge" x1="132" y1="88" x2="147" y2="88" marker-end="url(#ar)"/>
+        <line class="dg-edge" x1="270" y1="88" x2="285" y2="88" marker-end="url(#ar)"/>
+        <line class="dg-edge" x1="408" y1="88" x2="423" y2="88" marker-end="url(#ar)"/>
+        <line class="dg-edge" x1="556" y1="88" x2="571" y2="88" marker-end="url(#ar)"/>
+        <line class="dg-edge" x1="639" y1="60" x2="639" y2="46" marker-end="url(#ar)"/>
+      </svg>
+      <figcaption>C2 · The admission chain. Reject at validating admission = the object never reaches etcd.</figcaption>
+    </figure>
+    <pre><code><span class="c"># Recommended --enable-admission-plugins value</span>
+--enable-admission-plugins=NodeRestriction,\
+  PodSecurity,\
+  ResourceQuota,\
+  LimitRanger,\
+  ServiceAccount,\
+  DefaultStorageClass,\
+  MutatingAdmissionWebhook,\
+  ValidatingAdmissionWebhook
+
+<span class="c"># NodeRestriction prevents kubelets from modifying other nodes' objects</span>
+<span class="c"># PodSecurity enforces Pod Security Standards</span></code></pre>
+
+    <h3>kubelet Hardening</h3>
+    <pre><span class="lang">yaml</span><code><span class="c"># /var/lib/kubelet/config.yaml</span>
+<span class="k">authentication</span>:
+  <span class="k">anonymous</span>:
+    <span class="k">enabled</span>: <span class="t">false</span>     <span class="c"># no anonymous requests to kubelet API</span>
+  <span class="k">webhook</span>:
+    <span class="k">enabled</span>: <span class="t">true</span>
+<span class="k">authorization</span>:
+  <span class="k">mode</span>: <span class="v">Webhook</span>         <span class="c"># not AlwaysAllow</span>
+<span class="k">readOnlyPort</span>: <span class="n">0</span>          <span class="c"># disable unauthenticated read port</span>
+<span class="k">protectKernelDefaults</span>: <span class="t">true</span></code></pre>
+
+    <h2>2. etcd Encryption at Rest</h2>
+    <p>By default, Secrets are stored in plain text in etcd. Anyone who reads the etcd files or a snapshot sees every password. An <strong>EncryptionConfiguration</strong> tells the API server to encrypt Secrets <em>before</em> it writes them, and decrypt them when it reads. The data on disk becomes ciphertext; the key stays in a file only the API server reads.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 150" role="img" aria-label="Without encryption a secret lands in etcd as plaintext; with an encryption provider the API server encrypts it first">
+        <rect class="dg-box" x="20" y="50" width="120" height="50" rx="8"/>
+        <text class="dg-sub" x="80" y="80" text-anchor="middle">Secret</text>
+        <rect class="dg-box" x="270" y="20" width="180" height="44" rx="8" stroke="#ef4444"/>
+        <text class="dg-sub" x="360" y="40" text-anchor="middle">etcd (default)</text>
+        <text class="dg-sub" x="360" y="55" text-anchor="middle" fill="#991b1b">password=hunter2 (plain)</text>
+        <rect class="dg-box" x="270" y="86" width="180" height="44" rx="8" stroke="#22c55e"/>
+        <text class="dg-sub" x="360" y="106" text-anchor="middle">etcd (encrypted)</text>
+        <text class="dg-sub" x="360" y="121" text-anchor="middle" fill="#15803d">k8s:enc:aescbc:v1:...</text>
+        <rect class="dg-box" x="520" y="86" width="180" height="44" rx="8" stroke="#a855f7"/>
+        <text class="dg-sub" x="610" y="106" text-anchor="middle">EncryptionConfiguration</text>
+        <text class="dg-sub" x="610" y="121" text-anchor="middle">holds the key</text>
+        <line class="dg-edge" x1="140" y1="66" x2="266" y2="42" marker-end="url(#ar)"/>
+        <text class="dg-edge-lbl" x="205" y="45" text-anchor="middle" fill="#991b1b">no config</text>
+        <line class="dg-edge" x1="140" y1="82" x2="266" y2="106" marker-end="url(#ar)"/>
+        <text class="dg-edge-lbl" x="205" y="112" text-anchor="middle" fill="#15803d">api-server encrypts</text>
+        <line class="dg-edge" x1="518" y1="108" x2="452" y2="108" marker-end="url(#ar)"/>
+      </svg>
+      <figcaption>C4 · Encryption at rest. The provider config makes the API server encrypt Secrets before they touch disk.</figcaption>
+    </figure>
+    <pre><span class="lang">yaml</span><code><span class="c"># /etc/kubernetes/enc/encryption-config.yaml</span>
+<span class="k">apiVersion</span>: <span class="v">apiserver.config.k8s.io/v1</span>
+<span class="k">kind</span>: <span class="t">EncryptionConfiguration</span>
+<span class="k">resources</span>:
+- <span class="k">resources</span>:
+  - <span class="v">secrets</span>
+  <span class="k">providers</span>:
+  - <span class="k">aescbc</span>:
+      <span class="k">keys</span>:
+      - <span class="k">name</span>: <span class="v">key1</span>
+        <span class="k">secret</span>: <span class="v">&lt;base64-encoded-32-byte-key&gt;</span>  <span class="c"># head -c 32 /dev/urandom | base64</span>
+  - <span class="k">identity</span>: {}   <span class="c"># fallback: read unencrypted existing secrets</span></code></pre>
+
+    <pre><code><span class="c"># Add to kube-apiserver.yaml:</span>
+--encryption-provider-config=/etc/kubernetes/enc/encryption-config.yaml
+
+<span class="c"># Mount the file as a hostPath volume in the static pod manifest</span>
+<span class="c"># After enabling, re-encrypt all existing secrets:</span>
+kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+
+<span class="c"># Verify a secret is encrypted in etcd</span>
+ETCDCTL_API=3 etcdctl get /registry/secrets/default/my-secret \
+  --cacert=... --cert=... --key=... | hexdump -C | head
+<span class="c"># Should show encrypted bytes, not plain text</span></code></pre>
+
+    <h2>3. RBAC Hardening — Least Privilege</h2>
+    <div class="callout danger"><div class="callout-title">Dangerous RBAC Patterns to Eliminate</div>
+    <ul style="margin-left:16px;margin-top:6px">
+      <li><code>verbs: ["*"]</code> — wildcard verbs, allows everything</li>
+      <li><code>resources: ["*"]</code> — wildcard resources</li>
+      <li><code>cluster-admin</code> bound to user/SA unnecessarily</li>
+      <li>Binding to the <code>system:masters</code> group</li>
+    </ul></div>
+
+    <pre><code><span class="c"># Find overly permissive bindings</span>
+kubectl get clusterrolebindings -o wide
+kubectl get rolebindings -A -o wide
+
+<span class="c"># Find all subjects with cluster-admin</span>
+kubectl get clusterrolebindings -o json | \
+  jq '.items[] | select(.roleRef.name=="cluster-admin") | .subjects'
+
+<span class="c"># Check what permissions a SA has</span>
+kubectl auth can-i --list --as=system:serviceaccount:default:my-sa</code></pre>
+
+    <h2>4. ServiceAccount Token Hardening</h2>
+    <p>By default, every pod gets a ServiceAccount token auto-mounted. This is a security risk if the app doesn't need to talk to the API server.</p>
+    <pre><span class="lang">yaml</span><code><span class="c"># Disable auto-mount on the ServiceAccount</span>
+<span class="k">apiVersion</span>: <span class="v">v1</span>
+<span class="k">kind</span>: <span class="t">ServiceAccount</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="v">my-app-sa</span>
+<span class="k">automountServiceAccountToken</span>: <span class="t">false</span>
+
+<span class="c">---</span>
+<span class="c"># Or disable per-pod</span>
+<span class="k">spec</span>:
+  <span class="k">automountServiceAccountToken</span>: <span class="t">false</span></code></pre>
+
+    <h3>Bound ServiceAccount Tokens (recommended)</h3>
+    <p>K8s 1.20+ supports short-lived, audience-bound tokens via the <code>TokenRequest</code> API. Use projected volumes instead of the legacy auto-mounted token:</p>
+    <pre><span class="lang">yaml</span><code><span class="k">volumes</span>:
+- <span class="k">name</span>: <span class="v">token</span>
+  <span class="k">projected</span>:
+    <span class="k">sources</span>:
+    - <span class="k">serviceAccountToken</span>:
+        <span class="k">audience</span>: <span class="v">api</span>
+        <span class="k">expirationSeconds</span>: <span class="n">3600</span>   <span class="c"># 1 hour, auto-rotated</span>
+        <span class="k">path</span>: <span class="v">token</span></code></pre>
+
+    <h2>5. Upgrade Kubernetes Frequently</h2>
+    <p>K8s releases patch CVEs regularly. Running an old version is a CKS failure in real life and the exam may test your upgrade knowledge. Follow the same kubeadm upgrade process from the CKA guide.</p>
+    <pre><code><span class="c"># Check current version and available upgrades</span>
+kubectl version
+kubeadm upgrade plan</code></pre>
+
+    <div class="callout info"><div class="callout-title">References</div>
+    <a href="https://kubernetes.io/docs/concepts/security/controlling-access/" target="_blank">Controlling Access to the API</a> &nbsp;|&nbsp;
+    <a href="https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/" target="_blank">Encrypting Secret Data at Rest</a></div>
+  </div>
+
+  <!-- SYSTEM HARDENING -->
+  <div class="section" id="sec-system-hardening">
+    <h1>System Hardening</h1>
+    <p class="lead"><span class="tag ty">15% of exam</span> — Reducing OS attack surface, Linux capabilities, AppArmor profiles, and seccomp syscall filtering.</p>
+
+    <h2>1. Minimize OS Footprint</h2>
+    <ul>
+      <li>Remove unused packages: <code>apt-get autoremove</code>, audit with <code>dpkg --list</code></li>
+      <li>Disable unnecessary services: <code>systemctl disable --now snapd</code></li>
+      <li>Close unused ports: <code>ss -tlnp</code> to list, then disable services</li>
+      <li>Use minimal base images in containers (distroless, scratch, alpine)</li>
+    </ul>
+    <pre><code><span class="c"># Check open ports on a node</span>
+ss -tlnp
+netstat -tlnp   <span class="c"># alternative</span>
+
+<span class="c"># Check running services</span>
+systemctl list-units --type=service --state=running
+
+<span class="c"># Remove a package</span>
+apt-get purge --auto-remove snapd
+apt-get purge --auto-remove nfs-common</code></pre>
+
+    <h2>2. Linux Capabilities</h2>
+    <p>Capabilities break up root's omnipotent privilege into discrete units. Containers by default get a subset of capabilities. <strong>CKS expects you to drop all and add only what's needed.</strong></p>
+
+    <table>
+      <tr><th>Capability</th><th>What it allows</th><th>Risk</th></tr>
+      <tr><td><code>NET_ADMIN</code></td><td>Modify network interfaces, routing</td><td>High — network manipulation</td></tr>
+      <tr><td><code>SYS_ADMIN</code></td><td>Wide range of system admin ops</td><td>Very High — near root equivalent</td></tr>
+      <tr><td><code>CAP_SYS_PTRACE</code></td><td>Trace processes</td><td>High — can read other process memory</td></tr>
+      <tr><td><code>NET_RAW</code></td><td>Raw socket access</td><td>Medium — packet sniffing</td></tr>
+    </table>
+
+    <pre><span class="lang">yaml</span><code><span class="k">spec</span>:
+  <span class="k">containers</span>:
+  - <span class="k">name</span>: <span class="v">app</span>
+    <span class="k">image</span>: <span class="v">myapp</span>
+    <span class="k">securityContext</span>:
+      <span class="k">capabilities</span>:
+        <span class="k">drop</span>: [<span class="v">"ALL"</span>]       <span class="c"># drop everything first</span>
+        <span class="k">add</span>: [<span class="v">"NET_BIND_SERVICE"</span>]  <span class="c"># add only what's needed</span></code></pre>
+
+    <h2>3. AppArmor</h2>
+    <p>AppArmor is a Linux Mandatory Access Control (MAC) system. Profiles define what files, capabilities, and syscalls a program can use. K8s can apply AppArmor profiles to containers.</p>
+
+    <h3>Managing AppArmor Profiles</h3>
+    <pre><code><span class="c"># Check AppArmor status on a node</span>
+apparmor_status
+aa-status
+
+<span class="c"># Load a profile</span>
+apparmor_parser -q /etc/apparmor.d/my-profile
+
+<span class="c"># Check loaded profiles</span>
+cat /sys/kernel/security/apparmor/profiles</code></pre>
+
+    <h3>Example AppArmor Profile</h3>
+    <pre><span class="lang">apparmor</span><code><span class="c"># /etc/apparmor.d/k8s-deny-write</span>
+#include &lt;tunables/global&gt;
+
+profile k8s-deny-write flags=(attach_disconnected) {
+  #include &lt;abstractions/base&gt;
+
+  file,             <span class="c"># allow all file reads</span>
+  deny /** w,       <span class="c"># deny all writes to filesystem</span>
+  deny /proc/* rw,  <span class="c"># deny /proc access</span>
+
+  network inet tcp,
+  network inet udp,
+}</code></pre>
+
+    <h3>Apply AppArmor Profile to a Pod</h3>
+    <pre><span class="lang">yaml</span><code><span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="v">secure-pod</span>
+  <span class="k">annotations</span>:
+    <span class="c"># Format: container.apparmor.security.beta.kubernetes.io/&lt;container-name&gt;</span>
+    <span class="k">container.apparmor.security.beta.kubernetes.io/app</span>: <span class="v">localhost/k8s-deny-write</span>
+<span class="k">spec</span>:
+  <span class="k">containers</span>:
+  - <span class="k">name</span>: <span class="v">app</span>   <span class="c"># must match the annotation container name</span>
+    <span class="k">image</span>: <span class="v">nginx</span></code></pre>
+
+    <div class="callout warn"><div class="callout-title">AppArmor Must Be Loaded on the Node</div>
+    The profile must be loaded on <em>every node</em> that the pod might be scheduled on before applying the annotation. Use a DaemonSet to distribute profiles, or ensure they're in your node image.</div>
+
+    <h2>4. Seccomp</h2>
+    <p>Seccomp (secure computing mode) filters syscalls a container can make. Blocks dangerous syscalls like <code>ptrace</code>, <code>mount</code>, <code>unshare</code>.</p>
+
+    <h3>Built-in Profiles</h3>
+    <table>
+      <tr><th>Profile</th><th>Effect</th></tr>
+      <tr><td><code>RuntimeDefault</code></td><td>Use container runtime's default seccomp policy (recommended baseline)</td></tr>
+      <tr><td><code>Unconfined</code></td><td>No seccomp filtering (default if not set)</td></tr>
+      <tr><td><code>Localhost/profile.json</code></td><td>Custom profile from node's <code>/var/lib/kubelet/seccomp/</code></td></tr>
+    </table>
+
+    <pre><span class="lang">yaml</span><code><span class="k">spec</span>:
+  <span class="k">securityContext</span>:
+    <span class="k">seccompProfile</span>:
+      <span class="k">type</span>: <span class="v">RuntimeDefault</span>   <span class="c"># at pod level (all containers)</span>
+  <span class="k">containers</span>:
+  - <span class="k">name</span>: <span class="v">app</span>
+    <span class="k">securityContext</span>:
+      <span class="k">seccompProfile</span>:
+        <span class="k">type</span>: <span class="v">Localhost</span>       <span class="c"># at container level (overrides pod)</span>
+        <span class="k">localhostProfile</span>: <span class="v">profiles/audit.json</span>   <span class="c"># relative to /var/lib/kubelet/seccomp/</span></code></pre>
+
+    <h3>Custom Seccomp Profile (audit mode)</h3>
+    <pre><span class="lang">json</span><code>{
+  "defaultAction": "SCMP_ACT_LOG",
+  "syscalls": [
+    {
+      "names": ["chmod", "chown", "setuid", "setgid", "mount"],
+      "action": "SCMP_ACT_ERRNO"
+    }
+  ]
+}</code></pre>
+
+    <div class="callout tip"><div class="callout-title">Exam Pattern</div>
+    A common exam task: "Apply the RuntimeDefault seccomp profile to all containers in this deployment." Just add the <code>seccompProfile</code> block to the pod spec's <code>securityContext</code>.</div>
+
+    <div class="callout info"><div class="callout-title">References</div>
+    <a href="https://kubernetes.io/docs/tutorials/security/apparmor/" target="_blank">AppArmor Tutorial</a> &nbsp;|&nbsp;
+    <a href="https://kubernetes.io/docs/tutorials/security/seccomp/" target="_blank">Seccomp Tutorial</a> &nbsp;|&nbsp;
+    <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/" target="_blank">Security Context</a></div>
+  </div>
+
+  <!-- MICROSERVICE VULNERABILITIES -->
+  <div class="section" id="sec-microservice">
+    <h1>Minimize Microservice Vulnerabilities</h1>
+    <p class="lead"><span class="tag tr">20% of exam</span> — SecurityContext hardening, Pod Security Admission, OPA/Gatekeeper, Secrets management, container sandboxing, and mTLS.</p>
+
+    <h2>1. SecurityContext — Full Reference</h2>
+    <p>The most exam-tested topic. Know every field cold.</p>
+    <pre><span class="lang">yaml</span><code><span class="k">spec</span>:
+  <span class="k">securityContext</span>:                    <span class="c"># pod-level (applies to all containers)</span>
+    <span class="k">runAsUser</span>: <span class="n">1000</span>                   <span class="c"># UID for all containers</span>
+    <span class="k">runAsGroup</span>: <span class="n">3000</span>                  <span class="c"># GID for all containers</span>
+    <span class="k">fsGroup</span>: <span class="n">2000</span>                     <span class="c"># GID for mounted volumes</span>
+    <span class="k">runAsNonRoot</span>: <span class="t">true</span>                <span class="c"># prevents running as UID 0</span>
+    <span class="k">seccompProfile</span>:
+      <span class="k">type</span>: <span class="v">RuntimeDefault</span>
+  <span class="k">containers</span>:
+  - <span class="k">name</span>: <span class="v">app</span>
+    <span class="k">image</span>: <span class="v">myapp:1.0</span>
+    <span class="k">securityContext</span>:                  <span class="c"># container-level (overrides pod-level)</span>
+      <span class="k">allowPrivilegeEscalation</span>: <span class="t">false</span> <span class="c"># no sudo/setuid binaries</span>
+      <span class="k">readOnlyRootFilesystem</span>: <span class="t">true</span>    <span class="c"># immutable container FS</span>
+      <span class="k">privileged</span>: <span class="t">false</span>               <span class="c"># not privileged (never set true in prod)</span>
+      <span class="k">runAsNonRoot</span>: <span class="t">true</span>
+      <span class="k">runAsUser</span>: <span class="n">1000</span>
+      <span class="k">capabilities</span>:
+        <span class="k">drop</span>: [<span class="v">"ALL"</span>]
+        <span class="k">add</span>: [<span class="v">"NET_BIND_SERVICE"</span>]</code></pre>
+
+    <div class="callout exam"><div class="callout-title">Most Common Exam Fix</div>
+    "Harden this pod so it cannot write to its filesystem, cannot escalate privileges, and runs as non-root." Answer: set <code>readOnlyRootFilesystem: true</code>, <code>allowPrivilegeEscalation: false</code>, <code>runAsNonRoot: true</code>. If the app writes to disk, add an <code>emptyDir</code> volume for that specific path.</div>
+
+    <h2>2. Pod Security Admission (PSA)</h2>
+    <p>PSA replaced PodSecurityPolicy (removed in K8s 1.25). It enforces <strong>Pod Security Standards</strong> at the namespace level via labels.</p>
+
+    <h3>Three Security Levels</h3>
+    <table>
+      <tr><th>Level</th><th>Restrictions</th><th>Use Case</th></tr>
+      <tr><td><code>privileged</code></td><td>No restrictions</td><td>System namespaces (kube-system)</td></tr>
+      <tr><td><code>baseline</code></td><td>Blocks known privilege escalations (no privileged pods, no hostPID, no hostNetwork)</td><td>Most workloads</td></tr>
+      <tr><td><code>restricted</code></td><td>Strictest — requires non-root, drop all caps, no privilege escalation, seccomp runtime default</td><td>Security-critical apps</td></tr>
+    </table>
+
+    <h3>Three Modes</h3>
+    <table>
+      <tr><th>Mode</th><th>Behavior</th></tr>
+      <tr><td><code>enforce</code></td><td>Reject pods that violate the policy</td></tr>
+      <tr><td><code>audit</code></td><td>Allow but log violations in audit log</td></tr>
+      <tr><td><code>warn</code></td><td>Allow but send warning to user</td></tr>
+    </table>
+
+    <pre><code><span class="c"># Apply PSA to a namespace using labels</span>
+kubectl label namespace prod \
+  pod-security.kubernetes.io/enforce=restricted \
+  pod-security.kubernetes.io/enforce-version=latest \
+  pod-security.kubernetes.io/warn=restricted \
+  pod-security.kubernetes.io/warn-version=latest
+
+<span class="c"># Check what a pod would violate before applying</span>
+kubectl label namespace test pod-security.kubernetes.io/warn=restricted --dry-run=server</code></pre>
+
+    <h2>3. OPA Gatekeeper</h2>
+    <p>Open Policy Agent (OPA) Gatekeeper provides policy-as-code for K8s using Rego language. It integrates as a ValidatingWebhookConfiguration.</p>
+
+    <h3>Key Concepts</h3>
+    <table>
+      <tr><th>Object</th><th>Purpose</th></tr>
+      <tr><td><code>ConstraintTemplate</code></td><td>Defines a new CRD and the Rego policy logic</td></tr>
+      <tr><td><code>Constraint</code> (instance)</td><td>An instance of a ConstraintTemplate — where it applies and what parameters</td></tr>
+    </table>
+
+    <pre><span class="lang">yaml</span><code><span class="c"># ConstraintTemplate — defines the policy</span>
+<span class="k">apiVersion</span>: <span class="v">templates.gatekeeper.sh/v1</span>
+<span class="k">kind</span>: <span class="t">ConstraintTemplate</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="v">k8srequiredlabels</span>
+<span class="k">spec</span>:
+  <span class="k">crd</span>:
+    <span class="k">spec</span>:
+      <span class="k">names</span>:
+        <span class="k">kind</span>: <span class="v">K8sRequiredLabels</span>
+  <span class="k">targets</span>:
+  - <span class="k">target</span>: <span class="v">admission.k8s.gatekeeper.sh</span>
+    <span class="k">rego</span>: |
+      package k8srequiredlabels
+      violation[{"msg": msg}] {
+        provided := {label | input.review.object.metadata.labels[label]}
+        required := {label | label := input.parameters.labels[_]}
+        missing := required - provided
+        count(missing) > 0
+        msg := sprintf("Missing required labels: %v", [missing])
+      }</code></pre>
+
+    <pre><span class="lang">yaml</span><code><span class="c"># Constraint — enforces the policy</span>
+<span class="k">apiVersion</span>: <span class="v">constraints.gatekeeper.sh/v1beta1</span>
+<span class="k">kind</span>: <span class="t">K8sRequiredLabels</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="v">require-team-label</span>
+<span class="k">spec</span>:
+  <span class="k">match</span>:
+    <span class="k">kinds</span>:
+    - <span class="k">apiGroups</span>: [<span class="v">""</span>]
+      <span class="k">kinds</span>: [<span class="v">"Pod"</span>]
+  <span class="k">parameters</span>:
+    <span class="k">labels</span>: [<span class="v">"team"</span>]</code></pre>
+
+    <h2>4. Secrets Management Best Practices</h2>
+    <ul>
+      <li>Enable etcd encryption at rest (see Cluster Hardening section)</li>
+      <li>Use <code>automountServiceAccountToken: false</code> when not needed</li>
+      <li>Mount secrets as files (not env vars) — harder to accidentally leak in logs</li>
+      <li>Use external secrets managers (Vault, AWS Secrets Manager) with <a href="https://external-secrets.io/" target="_blank">external-secrets-operator</a></li>
+      <li>Rotate secrets regularly; use short-lived tokens</li>
+    </ul>
+    <pre><code><span class="c"># View a secret value (base64 encoded)</span>
+kubectl get secret db-secret -o jsonpath='{.data.password}' | base64 -d
+
+<span class="c"># Check who has access to secrets</span>
+kubectl auth can-i get secrets --as=system:serviceaccount:default:my-sa</code></pre>
+
+    <h2>5. Container Runtime Sandboxes</h2>
+    <p>Standard containers share the host kernel. Sandboxes add a stronger isolation layer for multi-tenant environments.</p>
+    <table>
+      <tr><th>Sandbox</th><th>Mechanism</th><th>Use Case</th></tr>
+      <tr><td><a href="https://gvisor.dev/" target="_blank">gVisor</a></td><td>User-space kernel (runsc)</td><td>Untrusted workloads, shared clusters</td></tr>
+      <tr><td><a href="https://katacontainers.io/" target="_blank">Kata Containers</a></td><td>Lightweight VM per container</td><td>Strong isolation, compliance requirements</td></tr>
+    </table>
+
+    <pre><span class="lang">yaml</span><code><span class="c"># RuntimeClass for gVisor</span>
+<span class="k">apiVersion</span>: <span class="v">node.k8s.io/v1</span>
+<span class="k">kind</span>: <span class="t">RuntimeClass</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="v">gvisor</span>
+<span class="k">handler</span>: <span class="v">runsc</span>   <span class="c"># must match runtime handler on nodes</span>
+
+<span class="c">---</span>
+<span class="c"># Use the RuntimeClass in a pod</span>
+<span class="k">spec</span>:
+  <span class="k">runtimeClassName</span>: <span class="v">gvisor</span>
+  <span class="k">containers</span>:
+  - <span class="k">name</span>: <span class="v">app</span>
+    <span class="k">image</span>: <span class="v">nginx</span></code></pre>
+  </div>
+
+  <!-- SUPPLY CHAIN SECURITY -->
+  <div class="section" id="sec-supply-chain">
+    <h1>Supply Chain Security</h1>
+    <p class="lead"><span class="tag tr">20% of exam</span> — Image vulnerability scanning with Trivy, admission controllers, Dockerfile best practices, image signing, and static analysis.</p>
+
+    <h2>1. Image Scanning with Trivy</h2>
+    <p><strong>Trivy</strong> is the most common image scanner in CKS. It scans images, filesystems, and IaC for vulnerabilities.</p>
+    <pre><code><span class="c"># Scan an image for vulnerabilities</span>
+trivy image nginx:1.25
+
+<span class="c"># Filter by severity</span>
+trivy image --severity HIGH,CRITICAL nginx:1.25
+
+<span class="c"># Scan and output as JSON</span>
+trivy image -f json -o results.json nginx:1.25
+
+<span class="c"># Scan a local tarball</span>
+trivy image --input myimage.tar
+
+<span class="c"># Scan a Dockerfile</span>
+trivy config ./Dockerfile
+
+<span class="c"># Scan K8s manifests for misconfigs</span>
+trivy k8s --report summary cluster</code></pre>
+
+    <div class="callout exam"><div class="callout-title">Exam Pattern</div>
+    "Scan image X and find the version with no HIGH or CRITICAL vulnerabilities." Use <code>trivy image --severity HIGH,CRITICAL &lt;image&gt;</code>. Then update the deployment's image to the safer version.</div>
+
+    <h2>2. Dockerfile Best Practices</h2>
+    <p>The exam may ask you to identify or fix insecure Dockerfile patterns.</p>
+
+    <div class="two-col">
+      <div>
+        <h4>Insecure Pattern</h4>
+        <pre><code>FROM ubuntu:latest
+RUN apt-get install -y curl
+USER root
+COPY . /app
+RUN chmod 777 /app
+CMD ["./app"]</code></pre>
+      </div>
+      <div>
+        <h4>Hardened Pattern</h4>
+        <pre><code>FROM ubuntu:22.04   # pinned version
+RUN apt-get install -y curl \
+  && rm -rf /var/lib/apt/lists/*
+RUN useradd -r -u 1001 appuser
+COPY --chown=appuser:appuser . /app
+USER 1001           # non-root
+CMD ["./app"]</code></pre>
+      </div>
+    </div>
+
+    <table>
+      <tr><th>Bad Practice</th><th>Risk</th><th>Fix</th></tr>
+      <tr><td><code>FROM &lt;image&gt;:latest</code></td><td>Unpredictable, may pull vulnerable image</td><td>Pin exact version: <code>nginx:1.25.3</code></td></tr>
+      <tr><td><code>USER root</code></td><td>Container runs as root</td><td>Create and use a non-root user</td></tr>
+      <tr><td>Secrets in Dockerfile</td><td>Leaked in image layers</td><td>Use build args or secrets mounts (never ENV)</td></tr>
+      <tr><td>Unnecessary packages</td><td>Larger attack surface</td><td>Install only what's needed, clean cache</td></tr>
+      <tr><td>Large base image</td><td>More CVEs, larger attack surface</td><td>Use distroless or scratch images</td></tr>
+    </table>
+
+    <h3>Distroless Images</h3>
+    <p>Distroless images contain only the application and its runtime dependencies — no shell, no package manager. Much smaller attack surface.</p>
+    <pre><code><span class="c"># Example: Go app with distroless base</span>
+FROM golang:1.21 AS builder
+WORKDIR /app
+COPY . .
+RUN CGO_ENABLED=0 go build -o myapp
+
+FROM gcr.io/distroless/static-debian12   <span class="c"># no shell, no package manager</span>
+COPY --from=builder /app/myapp /myapp
+USER nonroot:nonroot
+ENTRYPOINT ["/myapp"]</code></pre>
+
+    <h2>3. Admission Controllers for Image Policy</h2>
+    <h3>ImagePolicyWebhook</h3>
+    <p>An admission controller that calls an external webhook to approve or deny image deployments.</p>
+    <pre><span class="lang">yaml</span><code><span class="c"># admission-config.yaml</span>
+<span class="k">apiVersion</span>: <span class="v">apiserver.config.k8s.io/v1</span>
+<span class="k">kind</span>: <span class="t">AdmissionConfiguration</span>
+<span class="k">plugins</span>:
+- <span class="k">name</span>: <span class="v">ImagePolicyWebhook</span>
+  <span class="k">configuration</span>:
+    <span class="k">imagePolicy</span>:
+      <span class="k">kubeConfigFile</span>: <span class="v">/etc/kubernetes/admission/webhook-kubeconfig.yaml</span>
+      <span class="k">allowTTL</span>: <span class="n">50</span>
+      <span class="k">denyTTL</span>: <span class="n">50</span>
+      <span class="k">retryBackoff</span>: <span class="n">500</span>
+      <span class="k">defaultAllow</span>: <span class="t">false</span>   <span class="c"># deny if webhook is unreachable</span></code></pre>
+
+    <pre><code><span class="c"># Add to kube-apiserver.yaml:</span>
+--admission-control-config-file=/etc/kubernetes/admission/admission-config.yaml
+--enable-admission-plugins=...,ImagePolicyWebhook</code></pre>
+
+    <h3>ValidatingWebhookConfiguration</h3>
+    <pre><span class="lang">yaml</span><code><span class="k">apiVersion</span>: <span class="v">admissionregistration.k8s.io/v1</span>
+<span class="k">kind</span>: <span class="t">ValidatingWebhookConfiguration</span>
+<span class="k">metadata</span>:
+  <span class="k">name</span>: <span class="v">image-policy</span>
+<span class="k">webhooks</span>:
+- <span class="k">name</span>: <span class="v">validate.images.example.com</span>
+  <span class="k">rules</span>:
+  - <span class="k">apiGroups</span>: [<span class="v">""</span>]
+    <span class="k">apiVersions</span>: [<span class="v">v1</span>]
+    <span class="k">operations</span>: [<span class="v">CREATE</span>, <span class="v">UPDATE</span>]
+    <span class="k">resources</span>: [<span class="v">pods</span>]
+  <span class="k">clientConfig</span>:
+    <span class="k">service</span>:
+      <span class="k">name</span>: <span class="v">image-policy-svc</span>
+      <span class="k">namespace</span>: <span class="v">kube-system</span>
+      <span class="k">path</span>: <span class="v">/validate</span>
+    <span class="k">caBundle</span>: <span class="v">&lt;base64-ca-cert&gt;</span>
+  <span class="k">failurePolicy</span>: <span class="v">Fail</span>   <span class="c"># Fail or Ignore</span>
+  <span class="k">admissionReviewVersions</span>: [<span class="v">v1</span>]
+  <span class="k">sideEffects</span>: <span class="v">None</span></code></pre>
+
+    <h2>4. Image Signing (Cosign)</h2>
+    <p>Cosign (part of Sigstore) signs container images to verify authenticity and integrity.</p>
+    <pre><code><span class="c"># Sign an image</span>
+cosign sign --key cosign.key myregistry/myapp:1.0
+
+<span class="c"># Verify an image signature</span>
+cosign verify --key cosign.pub myregistry/myapp:1.0
+
+<span class="c"># Generate key pair</span>
+cosign generate-key-pair</code></pre>
+
+    <div class="callout info"><div class="callout-title">References</div>
+    <a href="https://aquasecurity.github.io/trivy/latest/" target="_blank">Trivy Docs</a> &nbsp;|&nbsp;
+    <a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/" target="_blank">Admission Controllers Reference</a> &nbsp;|&nbsp;
+    <a href="https://open-policy-agent.github.io/gatekeeper/" target="_blank">OPA Gatekeeper</a></div>
+  </div>
+
+  <!-- RUNTIME SECURITY -->
+  <div class="section" id="sec-runtime">
+    <h1>Monitoring, Logging &amp; Runtime Security</h1>
+    <p class="lead"><span class="tag tr">20% of exam</span> — Falco for runtime threat detection, Kubernetes audit logs, immutable containers, and behavioral analysis.</p>
+
+    <h2>1. Falco — Runtime Security</h2>
+    <p>Falco monitors syscalls at the kernel level using eBPF/kernel module. It alerts when containers do suspicious things: spawn shells, read sensitive files, make unexpected network connections.</p>
+
+    <h3>Falco Architecture</h3>
+    <ul>
+      <li><strong>Falco engine</strong>: Reads syscall events from kernel driver</li>
+      <li><strong>Rules</strong>: Define what constitutes suspicious behavior</li>
+      <li><strong>Outputs</strong>: stdout, files, syslog, HTTP webhooks, Slack</li>
+    </ul>
+
+    <pre><code><span class="c"># Install Falco (Helm)</span>
+helm repo add falcosecurity https://falcosecurity.github.io/charts
+helm install falco falcosecurity/falco --namespace falco --create-namespace
+
+<span class="c"># Check Falco logs</span>
+kubectl logs -l app=falco -n falco -f
+
+<span class="c"># On the host directly</span>
+systemctl status falco
+journalctl -u falco -f</code></pre>
+
+    <h3>Falco Rule Structure</h3>
+    <pre><span class="lang">yaml</span><code><span class="c"># /etc/falco/rules.d/custom-rules.yaml</span>
+- <span class="k">rule</span>: <span class="v">Shell Spawned in Container</span>
+  <span class="k">desc</span>: <span class="v">Alert when a shell is spawned in any container</span>
+  <span class="k">condition</span>: >
+    spawned_process
+    and container
+    and proc.name in (shell_binaries)
+    and not proc.pname in (shell_binaries)
+  <span class="k">output</span>: >
+    Shell spawned in container
+    (user=%user.name container=%container.name
+     image=%container.image.repository:%container.image.tag
+     shell=%proc.name parent=%proc.pname cmdline=%proc.cmdline)
+  <span class="k">priority</span>: <span class="v">WARNING</span>
+  <span class="k">tags</span>: [container, shell, mitre_execution]</code></pre>
+
+    <pre><span class="lang">yaml</span><code><span class="c"># Rule to detect writing to /etc</span>
+- <span class="k">rule</span>: <span class="v">Write to /etc in Container</span>
+  <span class="k">desc</span>: <span class="v">Detect writes to /etc inside a container</span>
+  <span class="k">condition</span>: >
+    open_write
+    and container
+    and fd.name startswith /etc
+  <span class="k">output</span>: >
+    File in /etc opened for write (user=%user.name
+    command=%proc.cmdline file=%fd.name
+    container=%container.name image=%container.image.repository)
+  <span class="k">priority</span>: <span class="v">ERROR</span></code></pre>
+
+    <h3>Key Falco Condition Fields</h3>
+    <table>
+      <tr><th>Field</th><th>Meaning</th></tr>
+      <tr><td><code>container</code></td><td>Event is from a container (not host)</td></tr>
+      <tr><td><code>spawned_process</code></td><td>A new process was created</td></tr>
+      <tr><td><code>open_write</code></td><td>A file was opened for writing</td></tr>
+      <tr><td><code>proc.name</code></td><td>Process name</td></tr>
+      <tr><td><code>proc.cmdline</code></td><td>Full command line</td></tr>
+      <tr><td><code>container.name</code></td><td>Container name</td></tr>
+      <tr><td><code>container.image.repository</code></td><td>Image repo</td></tr>
+      <tr><td><code>fd.name</code></td><td>File descriptor name (path)</td></tr>
+      <tr><td><code>user.name</code></td><td>User running the process</td></tr>
+    </table>
+
+    <pre><code><span class="c"># Test a Falco rule — run something suspicious</span>
+kubectl exec -it my-pod -- bash   <span class="c"># should trigger Shell Spawned rule</span>
+
+<span class="c"># Reload Falco rules without restart</span>
+kill -1 $(cat /var/run/falco.pid)
+<span class="c"># or</span>
+falcoctl rules install</code></pre>
+
+    <h2>2. Kubernetes Audit Logging</h2>
+    <p>Audit logs record every request to the API server: who did what, when, on which resource.</p>
+
+    <h3>Audit Policy Levels</h3>
+    <table>
+      <tr><th>Level</th><th>What Gets Logged</th></tr>
+      <tr><td><code>None</code></td><td>Nothing</td></tr>
+      <tr><td><code>Metadata</code></td><td>Request metadata only (user, resource, verb) — no request/response body</td></tr>
+      <tr><td><code>Request</code></td><td>Metadata + request body</td></tr>
+      <tr><td><code>RequestResponse</code></td><td>Metadata + request body + response body</td></tr>
+    </table>
+
+    <h3>Audit Policy File</h3>
+    <pre><span class="lang">yaml</span><code><span class="c"># /etc/kubernetes/audit/audit-policy.yaml</span>
+<span class="k">apiVersion</span>: <span class="v">audit.k8s.io/v1</span>
+<span class="k">kind</span>: <span class="t">Policy</span>
+<span class="k">rules</span>:
+<span class="c"># Don't log read-only requests to non-sensitive resources</span>
+- <span class="k">level</span>: <span class="v">None</span>
+  <span class="k">verbs</span>: [<span class="v">get</span>, <span class="v">list</span>, <span class="v">watch</span>]
+  <span class="k">resources</span>:
+  - <span class="k">group</span>: <span class="v">""</span>
+    <span class="k">resources</span>: [<span class="v">configmaps</span>, <span class="v">endpoints</span>]
+
+<span class="c"># Log secret access at RequestResponse level</span>
+- <span class="k">level</span>: <span class="v">RequestResponse</span>
+  <span class="k">resources</span>:
+  - <span class="k">group</span>: <span class="v">""</span>
+    <span class="k">resources</span>: [<span class="v">secrets</span>]
+
+<span class="c"># Log all pod mutations</span>
+- <span class="k">level</span>: <span class="v">Request</span>
+  <span class="k">verbs</span>: [<span class="v">create</span>, <span class="v">update</span>, <span class="v">delete</span>, <span class="v">patch</span>]
+  <span class="k">resources</span>:
+  - <span class="k">group</span>: <span class="v">""</span>
+    <span class="k">resources</span>: [<span class="v">pods</span>]
+
+<span class="c"># Catch-all: metadata only for everything else</span>
+- <span class="k">level</span>: <span class="v">Metadata</span></code></pre>
+
+    <h3>Enable Audit Logging on API Server</h3>
+    <pre><code><span class="c"># Add to /etc/kubernetes/manifests/kube-apiserver.yaml:</span>
+--audit-policy-file=/etc/kubernetes/audit/audit-policy.yaml
+--audit-log-path=/var/log/kubernetes/audit.log
+--audit-log-maxage=30       <span class="c"># days to retain</span>
+--audit-log-maxbackup=10    <span class="c"># max backup files</span>
+--audit-log-maxsize=100     <span class="c"># MB per file</span>
+
+<span class="c"># Also mount the policy file and log directory as hostPath volumes</span>
+<span class="c"># in the static pod spec — both volumeMounts and volumes sections</span></code></pre>
+
+    <pre><code><span class="c"># Read audit logs</span>
+tail -f /var/log/kubernetes/audit.log | jq .
+
+<span class="c"># Find who deleted a pod</span>
+cat /var/log/kubernetes/audit.log | jq 'select(.verb=="delete" and .objectRef.resource=="pods")'
+
+<span class="c"># Find secret access</span>
+cat /var/log/kubernetes/audit.log | jq 'select(.objectRef.resource=="secrets")'</code></pre>
+
+    <h2>3. Immutable Containers</h2>
+    <p>Immutable containers cannot modify their filesystem at runtime. This prevents attackers from dropping malware or modifying configs post-compromise.</p>
+    <pre><span class="lang">yaml</span><code><span class="k">spec</span>:
+  <span class="k">containers</span>:
+  - <span class="k">name</span>: <span class="v">app</span>
+    <span class="k">image</span>: <span class="v">myapp</span>
+    <span class="k">securityContext</span>:
+      <span class="k">readOnlyRootFilesystem</span>: <span class="t">true</span>   <span class="c"># immutable FS</span>
+    <span class="k">volumeMounts</span>:
+    - <span class="k">name</span>: <span class="v">tmp</span>
+      <span class="k">mountPath</span>: <span class="v">/tmp</span>               <span class="c"># allow writes only here</span>
+    - <span class="k">name</span>: <span class="v">cache</span>
+      <span class="k">mountPath</span>: <span class="v">/var/cache</span>
+  <span class="k">volumes</span>:
+  - <span class="k">name</span>: <span class="v">tmp</span>
+    <span class="k">emptyDir</span>: {}
+  - <span class="k">name</span>: <span class="v">cache</span>
+    <span class="k">emptyDir</span>: {}</code></pre>
+
+    <h2>4. Detecting Threats — Common Scenarios</h2>
+    <table>
+      <tr><th>Threat</th><th>Detection Method</th><th>Response</th></tr>
+      <tr><td>Shell in container</td><td>Falco rule: <code>spawned_process and proc.name in (shell_binaries)</code></td><td>Alert + kill pod</td></tr>
+      <tr><td>Crypto miner</td><td>High CPU usage + suspicious outbound connections on port 4444/3333</td><td>Network policy + image scan</td></tr>
+      <tr><td>Privilege escalation</td><td>Falco: <code>proc.name=sudo</code> or <code>proc.name=su</code></td><td>Drop capabilities, runAsNonRoot</td></tr>
+      <tr><td>Sensitive file access</td><td>Falco: <code>fd.name in (/etc/shadow, /etc/passwd)</code></td><td>Alert + investigate</td></tr>
+      <tr><td>Unauthorized API calls</td><td>Audit logs: check verbs on sensitive resources</td><td>RBAC review</td></tr>
+    </table>
+
+    <div class="callout info"><div class="callout-title">References</div>
+    <a href="https://falco.org/docs/rules/" target="_blank">Falco Rules Reference</a> &nbsp;|&nbsp;
+    <a href="https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/" target="_blank">Kubernetes Audit</a> &nbsp;|&nbsp;
+    <a href="https://falco.org/docs/getting-started/" target="_blank">Falco Getting Started</a></div>
+  </div>
+
+  <!-- TOOLS REFERENCE -->
+  <div class="section" id="sec-tools">
+    <h1>Tools Quick Reference</h1>
+    <p class="lead">The four tools you must be fast with in the CKS exam. Each has a specific exam pattern.</p>
+
+    <h2>Falco</h2>
+    <table>
+      <tr><th>Task</th><th>Command</th></tr>
+      <tr><td>Check if running</td><td><code>systemctl status falco</code></td></tr>
+      <tr><td>View alerts</td><td><code>journalctl -u falco -f</code></td></tr>
+      <tr><td>Rules file location</td><td><code>/etc/falco/falco_rules.yaml</code>, <code>/etc/falco/rules.d/</code></td></tr>
+      <tr><td>Falco config</td><td><code>/etc/falco/falco.yaml</code></td></tr>
+      <tr><td>Reload rules</td><td><code>systemctl restart falco</code></td></tr>
+      <tr><td>Test rule syntax</td><td><code>falco --validate /etc/falco/rules.d/my-rule.yaml</code></td></tr>
+    </table>
+
+    <h2>Trivy</h2>
+    <table>
+      <tr><th>Task</th><th>Command</th></tr>
+      <tr><td>Scan image (all severities)</td><td><code>trivy image nginx:latest</code></td></tr>
+      <tr><td>Only HIGH/CRITICAL</td><td><code>trivy image --severity HIGH,CRITICAL nginx:latest</code></td></tr>
+      <tr><td>JSON output</td><td><code>trivy image -f json nginx:latest</code></td></tr>
+      <tr><td>Scan Dockerfile</td><td><code>trivy config ./Dockerfile</code></td></tr>
+      <tr><td>Scan K8s cluster</td><td><code>trivy k8s --report summary cluster</code></td></tr>
+      <tr><td>Ignore unfixed CVEs</td><td><code>trivy image --ignore-unfixed nginx:latest</code></td></tr>
+    </table>
+
+    <h2>kube-bench</h2>
+    <table>
+      <tr><th>Task</th><th>Command</th></tr>
+      <tr><td>Check control plane</td><td><code>kube-bench run --targets master</code></td></tr>
+      <tr><td>Check worker node</td><td><code>kube-bench run --targets node</code></td></tr>
+      <tr><td>Check etcd</td><td><code>kube-bench run --targets etcd</code></td></tr>
+      <tr><td>Run as K8s Job</td><td><code>kubectl apply -f job-master.yaml</code></td></tr>
+      <tr><td>Filter FAIL only</td><td><code>kube-bench run --targets master 2>&amp;1 | grep FAIL</code></td></tr>
+    </table>
+
+    <h2>openssl / cert tools</h2>
+    <table>
+      <tr><th>Task</th><th>Command</th></tr>
+      <tr><td>View cert details</td><td><code>openssl x509 -in cert.crt -noout -text</code></td></tr>
+      <tr><td>Check expiry</td><td><code>kubeadm certs check-expiration</code></td></tr>
+      <tr><td>Decode K8s secret cert</td><td><code>kubectl get secret tls-secret -o jsonpath='{.data.tls\.crt}' | base64 -d | openssl x509 -noout -text</code></td></tr>
+      <tr><td>Generate self-signed</td><td><code>openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout k.key -out c.crt -subj "/CN=host"</code></td></tr>
+    </table>
+
+    <h2>crictl (container runtime)</h2>
+    <table>
+      <tr><th>Task</th><th>Command</th></tr>
+      <tr><td>List running containers</td><td><code>crictl ps</code></td></tr>
+      <tr><td>List all containers</td><td><code>crictl ps -a</code></td></tr>
+      <tr><td>Container logs</td><td><code>crictl logs &lt;container-id&gt;</code></td></tr>
+      <tr><td>List images</td><td><code>crictl images</code></td></tr>
+      <tr><td>Pull image</td><td><code>crictl pull nginx:latest</code></td></tr>
+      <tr><td>Exec into container</td><td><code>crictl exec -it &lt;id&gt; sh</code></td></tr>
+    </table>
+  </div>
+
+  <!-- COMMAND REFERENCE -->
+  <div class="section" id="sec-cheatsheet">
+    <h1>Command Reference</h1>
+    <p class="lead">Kubernetes and Linux commands, searchable from anywhere with <strong>&#8984;K</strong> / <strong>Ctrl+K</strong>. Includes the CKS tools above plus AppArmor, seccomp, audit policy, and everything from the CKA side you still need.</p>
+    <div id="cmd-ref-root"></div>
+  </div>
+
+  <!-- EXAM DAY -->
+  <div class="section" id="sec-examday">
+    <h1>CKS Exam Day Tips</h1>
+    <p class="lead">Same terminal environment as CKA. Same aliases help. CKS questions are harder and more open-ended — the setup below is critical.</p>
+
+    <h2>First 2 Minutes Setup</h2>
+    <pre><code><span class="c"># Same as CKA — do these immediately</span>
+alias k=kubectl
+export do="--dry-run=client -o yaml"
+source &lt;(kubectl completion bash)
+complete -F __start_kubectl k
+
+<span class="c"># CKS additions: check what tools are available</span>
+which falco trivy kube-bench etcdctl crictl
+
+<span class="c"># Useful for editing static pod manifests safely</span>
+cp /etc/kubernetes/manifests/kube-apiserver.yaml /tmp/kube-apiserver-backup.yaml</code></pre>
+
+    <div class="callout danger"><div class="callout-title">Static Pod Manifests — Be Careful</div>
+    When editing files in <code>/etc/kubernetes/manifests/</code>, a YAML syntax error will crash the API server and you'll have no <code>kubectl</code> access. <strong>Always back up the file first.</strong> If you break it: fix the YAML manually, then wait 30–60s for kubelet to restart the pod.</div>
+
+    <h2>Common CKS Question Patterns &amp; Approaches</h2>
+    <table>
+      <tr><th>Question Type</th><th>Approach</th></tr>
+      <tr><td>Harden a pod's SecurityContext</td><td>Add <code>runAsNonRoot</code>, <code>readOnlyRootFilesystem</code>, <code>allowPrivilegeEscalation: false</code>, drop ALL caps</td></tr>
+      <tr><td>Apply AppArmor to a pod</td><td>Check profile is loaded on node → add annotation to pod metadata</td></tr>
+      <tr><td>Apply seccomp to a pod</td><td>Add <code>seccompProfile.type: RuntimeDefault</code> to pod/container securityContext</td></tr>
+      <tr><td>Scan image with Trivy</td><td><code>trivy image --severity HIGH,CRITICAL &lt;image&gt;</code> → update deployment image</td></tr>
+      <tr><td>Write a Falco rule</td><td>Edit <code>/etc/falco/rules.d/</code>, restart Falco, verify with <code>journalctl -u falco</code></td></tr>
+      <tr><td>Enable audit logs</td><td>Create policy file → add 3 flags to kube-apiserver manifest → add hostPath mounts</td></tr>
+      <tr><td>Encrypt secrets at rest</td><td>Create EncryptionConfiguration → add flag to apiserver → re-encrypt secrets</td></tr>
+      <tr><td>Create NetworkPolicy</td><td>Start with deny-all template from docs → add specific allow rules</td></tr>
+      <tr><td>Fix RBAC overexposure</td><td>Find binding with cluster-admin or wildcards → delete/replace with minimal Role</td></tr>
+      <tr><td>Disable SA token auto-mount</td><td>Set <code>automountServiceAccountToken: false</code> on SA or pod</td></tr>
+    </table>
+
+    <h2>CKS-Specific Exam Mistakes</h2>
+    <div class="callout danger"><div class="callout-title">Top CKS Mistakes</div>
+    <ul style="margin-left:16px;margin-top:6px">
+      <li><strong>Breaking the API server</strong> — bad YAML in kube-apiserver.yaml. Always backup first.</li>
+      <li><strong>AppArmor profile not loaded on node</strong> — annotation without loaded profile is silently ignored or causes pod to fail</li>
+      <li><strong>Wrong seccomp path</strong> — localhost profiles must exist in <code>/var/lib/kubelet/seccomp/</code> relative path</li>
+      <li><strong>Audit log missing volume mounts</strong> — policy file and log dir must be mounted into apiserver static pod</li>
+      <li><strong>Forgetting to restart Falco</strong> after editing rules — changes won't take effect</li>
+      <li><strong>NetworkPolicy with wrong namespace</strong> — policy only applies to pods in the namespace it's created in</li>
+    </ul></div>
+
+    <h2>Key Doc Pages to Know</h2>
+    <table>
+      <tr><th>Topic</th><th>Search Term on kubernetes.io</th></tr>
+      <tr><td>SecurityContext</td><td>"Configure a Security Context for a Pod"</td></tr>
+      <tr><td>Pod Security Admission</td><td>"Pod Security Admission"</td></tr>
+      <tr><td>AppArmor</td><td>"Restrict a Container's Access with AppArmor"</td></tr>
+      <tr><td>Seccomp</td><td>"Restrict a Container's Syscalls with seccomp"</td></tr>
+      <tr><td>Audit logging</td><td>"Auditing"</td></tr>
+      <tr><td>etcd encryption</td><td>"Encrypting Confidential Data at Rest"</td></tr>
+      <tr><td>Network Policies</td><td>"Network Policies"</td></tr>
+      <tr><td>Admission Controllers</td><td>"Using Admission Controllers"</td></tr>
+    </table>
+
+    <h2>Pre-Exam CKS Checklist</h2>
+    <ul>
+      <li>✓ Can you apply every SecurityContext field from memory?</li>
+      <li>✓ Can you write a basic Falco rule for shell-in-container?</li>
+      <li>✓ Can you enable audit logging (policy + apiserver flags + volume mounts)?</li>
+      <li>✓ Can you scan an image with Trivy and interpret output?</li>
+      <li>✓ Can you apply AppArmor to a pod (load profile + annotation)?</li>
+      <li>✓ Can you enable etcd encryption at rest end-to-end?</li>
+      <li>✓ Can you find and fix overpermissive RBAC bindings?</li>
+      <li>✓ Did you run killer.sh CKS simulator at least twice?</li>
+      <li>✓ Comfortable navigating K8s docs to security pages in &lt;30 seconds?</li>
+    </ul>
+
+    <div class="callout tip"><div class="callout-title">CKS Strategy</div>
+    The CKS exam values <em>depth over breadth</em>. A question about seccomp expects you to know the exact field paths and profile types. Spend more time doing hands-on practice than reading theory. Break things intentionally and fix them — that's exactly what the exam tests.</div>
+
+    <h2>Study Resources Summary</h2>
+    <table>
+      <tr><th>Resource</th><th>Focus</th></tr>
+      <tr><td><a href="https://killer.sh/" target="_blank">killer.sh CKS simulator</a></td><td>Best practice exam — harder than real, included with registration</td></tr>
+      <tr><td><a href="https://github.com/walidshaari/Certified-Kubernetes-Security-Specialist" target="_blank">walidshaari/CKS on GitHub</a></td><td>Community study guide, task exercises</td></tr>
+      <tr><td><a href="https://falco.org/docs/" target="_blank">Falco docs</a></td><td>Rule syntax, fields reference</td></tr>
+      <tr><td><a href="https://kubernetes.io/docs/concepts/security/" target="_blank">K8s Security Concepts</a></td><td>Pod Security Standards, RBAC, secrets</td></tr>
+      <tr><td><a href="https://github.com/aquasecurity/trivy" target="_blank">Trivy GitHub</a></td><td>Scanner usage and examples</td></tr>
+      <tr><td><a href="https://www.youtube.com/watch?v=wqsUfvRyYpw" target="_blank">Kim Wüstkamp CKS Course (YouTube)</a></td><td>Best free video course for CKS</td></tr>
+    </table>
+  </div>
+
+  <!-- ============================================================ PRACTICE -->
+  <div class="section" id="sec-practice">
+    <h1>Practice Cases</h1>
+    <p class="lead">Security task scenarios that mirror the real CKS exam. Read the task, harden the target in your own lab first, then open the solution to check yourself.</p>
+
+    <div class="callout exam"><div class="callout-title">How to Use</div>Do not read the solution first. Reproduce the scenario, solve it, then expand the answer. CKS tasks are open-ended — practice the full fix, not just the command.</div>
+
+    <h2>Cluster Setup &amp; Hardening</h2>
+    <details class="pcase"><summary>Run kube-bench and fix one failed control-plane check <span class="tag tb">~7 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Scan the control plane against the CIS benchmark. Fix one FAIL by editing an apiserver flag.</p>
+    <pre><code>kube-bench run --targets master
+# read a FAIL, then edit the flag it names:
+vi /etc/kubernetes/manifests/kube-apiserver.yaml
+# e.g. add --profiling=false ; kubelet restarts the static pod</code></pre>
+    <p><strong>Verify:</strong> re-run <code>kube-bench</code>; the check now passes.</p>
+    </div></details>
+
+    <details class="pcase"><summary>Enable etcd encryption at rest for Secrets <span class="tag ty">~10 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Encrypt Secrets in etcd with an EncryptionConfiguration, then re-encrypt existing secrets.</p>
+    <pre><code># 1) write EncryptionConfiguration (aescbc) to /etc/kubernetes/enc/enc.yaml
+# 2) add --encryption-provider-config to kube-apiserver.yaml + mount the path
+# 3) re-encrypt what already exists:
+kubectl get secrets -A -o json | kubectl replace -f -</code></pre>
+    <p><strong>Verify:</strong> <code>ETCDCTL_API=3 etcdctl get /registry/secrets/... </code> shows <code>k8s:enc:aescbc</code>, not plaintext.</p>
+    </div></details>
+
+    <details class="pcase"><summary>Disable the default ServiceAccount token automount <span class="tag ty">~4 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Stop a pod from mounting a SA token it does not need.</p>
+    <pre><code># On the pod spec (preferred, explicit):
+spec:
+  automountServiceAccountToken: false
+# Or on the ServiceAccount object itself</code></pre>
+    <p><strong>Verify:</strong> <code>kubectl exec</code> into the pod; <code>/var/run/secrets/kubernetes.io/serviceaccount</code> is absent.</p>
+    </div></details>
+
+    <details class="pcase"><summary>Tighten an over-permissive ClusterRoleBinding <span class="tag ty">~5 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> A ServiceAccount has cluster-admin. Grant it only read access to pods instead.</p>
+    <pre><code>kubectl delete clusterrolebinding &lt;too-broad-binding&gt;
+kubectl create clusterrole pod-viewer --verb=get,list,watch --resource=pods
+kubectl create rolebinding sa-pods --clusterrole=pod-viewer \
+  --serviceaccount=team:app-sa -n team
+kubectl auth can-i '*' '*' --as=system:serviceaccount:team:app-sa   # should be no</code></pre>
+    <p><strong>Verify:</strong> the SA can list pods but cannot delete or create anything else.</p>
+    </div></details>
+
+    <h2>System Hardening</h2>
+    <details class="pcase"><summary>Apply an AppArmor profile to a container <span class="tag ty">~6 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Load a profile on the node, then confine a pod's container with it.</p>
+    <pre><code># On the node: load the profile
+apparmor_parser -q /etc/apparmor.d/k8s-deny-write
+# On the container (K8s 1.30+ field):
+securityContext:
+  appArmorProfile:
+    type: Localhost
+    localhostProfile: k8s-deny-write</code></pre>
+    <p><strong>Verify:</strong> a blocked action (e.g. write to a denied path) fails inside the container.</p>
+    </div></details>
+
+    <details class="pcase"><summary>Confine a pod with the RuntimeDefault seccomp profile <span class="tag ty">~4 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Apply the default seccomp filter to a pod.</p>
+    <pre><code>spec:
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault</code></pre>
+    <p><strong>Verify:</strong> <code>kubectl get pod -o yaml</code> shows the seccompProfile; the pod runs normally.</p>
+    </div></details>
+
+    <details class="pcase"><summary>Drop all Linux capabilities, add only NET_BIND_SERVICE <span class="tag ty">~4 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Reduce a container to the minimum capability set.</p>
+    <pre><code>securityContext:
+  capabilities:
+    drop: ["ALL"]
+    add: ["NET_BIND_SERVICE"]
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false</code></pre>
+    <p><strong>Verify:</strong> the app binds port 80 but <code>capsh --print</code> in the container shows a minimal set.</p>
+    </div></details>
+
+    <h2>Microservice &amp; Supply Chain</h2>
+    <details class="pcase"><summary>Enforce the restricted Pod Security Standard on a namespace <span class="tag tr">~4 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Namespace <code>prod</code> must reject any pod that breaks the restricted standard.</p>
+    <pre><code>kubectl label namespace prod \
+  pod-security.kubernetes.io/enforce=restricted \
+  pod-security.kubernetes.io/warn=restricted</code></pre>
+    <p><strong>Verify:</strong> a privileged pod is rejected; a compliant non-root pod is admitted.</p>
+    </div></details>
+
+    <details class="pcase"><summary>Scan an image and pick a version with no HIGH/CRITICAL CVEs <span class="tag tr">~5 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Find a safe tag for an image, then update the deployment to it.</p>
+    <pre><code>trivy image --severity HIGH,CRITICAL myapp:1.0
+trivy image --severity HIGH,CRITICAL myapp:1.1   # compare tags
+kubectl set image deployment/app app=myapp:1.1</code></pre>
+    <p><strong>Verify:</strong> the chosen tag reports 0 HIGH and 0 CRITICAL findings.</p>
+    </div></details>
+
+    <details class="pcase"><summary>Block unsigned or untrusted images with an admission policy <span class="tag tr">~8 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Only allow images from a trusted registry. Use an ImagePolicyWebhook or an OPA/Gatekeeper constraint.</p>
+    <pre><code># Gatekeeper approach: ConstraintTemplate checks image prefix,
+# then a Constraint enforces registry allow-list on Pods.
+kubectl get constrainttemplates
+kubectl describe &lt;constraint&gt;   # confirm it is enforced, not dry-run</code></pre>
+    <p><strong>Verify:</strong> a pod from an untrusted registry is denied at admission.</p>
+    </div></details>
+
+    <h2>Runtime Security</h2>
+    <details class="pcase"><summary>Write a Falco rule that detects a shell in a container <span class="tag tr">~7 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Alert whenever any container spawns a shell.</p>
+    <pre><code>- rule: Shell Spawned in Container
+  desc: Alert when a shell starts in a container
+  condition: spawned_process and container and proc.name in (shell_binaries)
+  output: Shell in container (user=%user.name container=%container.name cmd=%proc.cmdline)
+  priority: WARNING</code></pre>
+    <p><strong>Verify:</strong> <code>kubectl exec -it pod -- bash</code> triggers the alert in Falco logs.</p>
+    </div></details>
+
+    <details class="pcase"><summary>Enable API server audit logging at Metadata level <span class="tag tr">~8 min</span></summary>
+    <div class="pcase-body">
+    <p><strong>Task:</strong> Configure an audit policy and point the apiserver at it.</p>
+    <pre><code># 1) write /etc/kubernetes/audit/policy.yaml (level: Metadata)
+# 2) add to kube-apiserver.yaml:
+#    --audit-policy-file, --audit-log-path, and mount both paths
+tail -f /var/log/kubernetes/audit.log</code></pre>
+    <p><strong>Verify:</strong> requests appear in the audit log with user, verb, and resource.</p>
+    </div></details>
+  </div>
+
+  <!-- ============================================================ PROGRESS -->
+  <div class="section" id="sec-progress">
+    <h1>My Progress</h1>
+    <p class="lead">Every checkpoint in this guide, added up. Tick the box beside any heading once you can do that task without looking it up. Click anything still open to jump straight to it.</p>
+    <div id="prog-root"></div>
+  </div>
+
+  <!-- ============================================================ QUIZ -->
+  <div class="section" id="sec-quiz">
+    <h1>Self-Quiz</h1>
+    <p class="lead">Recall drills for the CKS security layer. Read the prompt, answer out loud, then reveal to check. Mark each card Known or Review. Your marks are saved on this device.</p>
+
+    <div class="quiz-bar">
+      <button class="quiz-btn" onclick="quizReveal()">Reveal answer</button>
+      <button class="quiz-btn ghost" onclick="quizMark('known')">✓ Known</button>
+      <button class="quiz-btn ghost" onclick="quizMark('review')">↻ Review</button>
+      <button class="quiz-btn ghost" onclick="quizNext()">Next →</button>
+      <button class="quiz-btn ghost" onclick="quizTimer()" id="quiz-timer-btn">⏱ Start 2-min timer</button>
+      <span class="quiz-timer" id="quiz-timer" style="display:none">2:00</span>
+      <span class="quiz-progress" id="quiz-progress"></span>
+    </div>
+    <div class="quiz-card" id="quiz-card"></div>
+  </div>
+
+</div>
+
+<script src="cmd-data.js"></script>
+<script src="cmd-palette.js"></script>
+<script src="ask-claude.js"></script>
+<script src="progress-view.js"></script>
+<script src="sidebar-tree.js"></script>
+<script>
+const GUIDE = 'cks';   // localStorage namespace
+const titles = {
+  overview:'Overview & Exam Info', roadmap:'Learning Roadmap',
+  'cluster-setup':'Cluster Setup (10%)', 'cluster-hardening':'Cluster Hardening (15%)',
+  'system-hardening':'System Hardening (15%)', microservice:'Microservice Vulnerabilities (20%)',
+  'supply-chain':'Supply Chain Security (20%)', runtime:'Runtime Security (20%)',
+  practice:'Practice Cases', quiz:'Self-Quiz', progress:'My Progress',
+  tools:'Tools Quick Reference', cheatsheet:'Command Reference', examday:'Exam Day Tips'
+};
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') === "show('" + id + "')") n.classList.add('active');
+  });
+  document.getElementById('topbar-title').textContent = titles[id] || id;
+  window.scrollTo(0, 0);
+}
+
+/* ---------- PROGRESS TRACKING ---------- */
+const PKEY = GUIDE + '-progress';
+function loadProg() { try { return JSON.parse(localStorage.getItem(PKEY)) || {}; } catch (e) { return {}; } }
+function saveProg(p) { localStorage.setItem(PKEY, JSON.stringify(p)); }
+
+function initProgress() {
+  const prog = loadProg();
+  const skip = new Set(['sec-practice', 'sec-quiz', 'sec-cheatsheet', 'sec-progress']);
+  document.querySelectorAll('.section').forEach(sec => {
+    if (skip.has(sec.id)) return;
+    sec.querySelectorAll('h2').forEach(h2 => {
+      const key = sec.id + '::' + h2.textContent.trim();
+      const wrap = document.createElement('div');
+      wrap.className = 'h2wrap';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.className = 'pchk'; cb.checked = !!prog[key];
+      const lbl = document.createElement('label'); lbl.className = 'pchk-label'; lbl.textContent = 'Got it';
+      h2.parentNode.insertBefore(wrap, h2);
+      wrap.appendChild(cb); wrap.appendChild(h2); wrap.appendChild(lbl);
+      if (cb.checked) wrap.classList.add('done');
+      lbl.addEventListener('click', () => { cb.checked = !cb.checked; onToggle(); });
+      function onToggle() {
+        const p = loadProg();
+        if (cb.checked) { p[key] = 1; wrap.classList.add('done'); }
+        else { delete p[key]; wrap.classList.remove('done'); }
+        saveProg(p); updateBadges();
+      }
+      cb.addEventListener('change', onToggle);
+    });
+  });
+  updateBadges();
+}
+
+function updateBadges() {
+  const prog = loadProg();
+  document.querySelectorAll('.nav-item').forEach(nav => {
+    const m = (nav.getAttribute('onclick') || '').match(/show\('([^']+)'\)/);
+    if (!m) return;
+    if (m[1] === 'practice' || m[1] === 'quiz' || m[1] === 'cheatsheet' || m[1] === 'progress') return;
+    const sec = document.getElementById('sec-' + m[1]);
+    if (!sec) return;
+    const h2s = sec.querySelectorAll('h2');
+    if (!h2s.length) return;
+    let done = 0;
+    h2s.forEach(h2 => { if (prog[sec.id + '::' + h2.textContent.trim()]) done++; });
+    let b = nav.querySelector('.nav-pct.prog');
+    if (!b) { b = document.createElement('span'); b.className = 'nav-pct prog'; nav.appendChild(b); }
+    b.textContent = done + '/' + h2s.length;
+  });
+}
+
+function resetProgress() {
+  if (!confirm('Clear all progress and quiz marks on this device?')) return;
+  localStorage.removeItem(PKEY);
+  localStorage.removeItem(GUIDE + '-quiz');
+  localStorage.removeItem(GUIDE + '-cmd-recent');
+  document.querySelectorAll('.pchk').forEach(cb => { cb.checked = false; });
+  document.querySelectorAll('.h2wrap.done').forEach(w => w.classList.remove('done'));
+  updateBadges(); renderQuiz();
+}
+
+/* ---------- SELF-QUIZ ---------- */
+const QUIZ = [
+  { cat:'4Cs', q:'Name the 4Cs of cloud native security, outermost first.', a:'<strong>Cloud, Cluster, Container, Code.</strong>' },
+  { cat:'Cluster Setup', q:'Which tool checks a cluster against the CIS Benchmark?', a:'<code>kube-bench</code> — run with <code>--targets master</code> or <code>node</code>.' },
+  { cat:'Cluster Setup', q:'How do you stop a pod from reaching the cloud node metadata endpoint?', a:'A NetworkPolicy egress rule that denies traffic to <code>169.254.169.254</code>.' },
+  { cat:'Hardening', q:'Which resource replaced PodSecurityPolicy, and how is it applied?', a:'<strong>Pod Security Admission</strong> — applied with namespace labels (<code>pod-security.kubernetes.io/enforce</code>).' },
+  { cat:'Hardening', q:'The three Pod Security Standard levels?', a:'<strong>privileged</strong>, <strong>baseline</strong>, <strong>restricted</strong>.' },
+  { cat:'Hardening', q:'Which apiserver flag points to the etcd encryption config?', a:'<code>--encryption-provider-config</code>' },
+  { cat:'Hardening', q:'After enabling encryption at rest, how do you encrypt existing secrets?', a:'<code>kubectl get secrets -A -o json | kubectl replace -f -</code>' },
+  { cat:'Hardening', q:'Field to stop a pod mounting its ServiceAccount token?', a:'<code>automountServiceAccountToken: false</code> (on the pod or the SA).' },
+  { cat:'System', q:'Two Linux kernel features CKS uses to restrict a container?', a:'<strong>AppArmor</strong> (file/path confinement) and <strong>seccomp</strong> (syscall filtering).' },
+  { cat:'System', q:'securityContext to drop all caps but keep port-binding?', a:'<code>capabilities: {drop: ["ALL"], add: ["NET_BIND_SERVICE"]}</code>' },
+  { cat:'System', q:'seccomp profile type that applies the runtime default filter?', a:'<code>seccompProfile: {type: RuntimeDefault}</code>' },
+  { cat:'Microservice', q:'Two settings that force a container to run unprivileged?', a:'<code>runAsNonRoot: true</code> and <code>allowPrivilegeEscalation: false</code>.' },
+  { cat:'Microservice', q:'What language does OPA Gatekeeper use for policy?', a:'<strong>Rego</strong> — inside a ConstraintTemplate, enforced by a Constraint.' },
+  { cat:'Microservice', q:'Why mount secrets as files instead of env vars?', a:'Env vars leak easily (logs, child processes); file mounts are harder to expose accidentally.' },
+  { cat:'Supply Chain', q:'Command to scan an image for only HIGH/CRITICAL CVEs?', a:'<code>trivy image --severity HIGH,CRITICAL &lt;image&gt;</code>' },
+  { cat:'Supply Chain', q:'Tool that signs and verifies container images?', a:'<strong>Cosign</strong> (from the Sigstore project).' },
+  { cat:'Supply Chain', q:'Two Dockerfile practices that shrink attack surface?', a:'Use a minimal/distroless base image and run as a non-root <code>USER</code>.' },
+  { cat:'Runtime', q:'What does Falco monitor to detect threats?', a:'Syscalls at the kernel level (eBPF or kernel module).' },
+  { cat:'Runtime', q:'Falco condition fields to detect a shell in a container?', a:'<code>spawned_process and container and proc.name in (shell_binaries)</code>' },
+  { cat:'Runtime', q:'Audit policy level that logs request metadata but no bodies?', a:'<code>Metadata</code>. (Others: None, Request, RequestResponse.)' },
+  { cat:'Runtime', q:'How do you make a running container filesystem immutable?', a:'<code>securityContext: {readOnlyRootFilesystem: true}</code>' }
+];
+window.QUIZ = QUIZ;
+let qIdx = 0, qRevealed = false, qTimerId = null, qLeft = 120;
+
+function loadMarks() { try { return JSON.parse(localStorage.getItem(GUIDE + '-quiz')) || {}; } catch (e) { return {}; } }
+function saveMarks(m) { localStorage.setItem(GUIDE + '-quiz', JSON.stringify(m)); }
+
+function renderQuiz() {
+  const card = document.getElementById('quiz-card');
+  if (!card) return;
+  const item = QUIZ[qIdx];
+  const marks = loadMarks();
+  const mark = marks[qIdx];
+  const badge = mark === 'known' ? '<span class="quiz-known k">✓ Known</span>'
+              : mark === 'review' ? '<span class="quiz-known r">↻ Review</span>' : '';
+  card.innerHTML =
+    '<div class="quiz-cat">' + item.cat + ' ' + badge + '</div>' +
+    '<div class="quiz-q">' + item.q + '</div>' +
+    '<div class="quiz-a' + (qRevealed ? '' : ' hidden') + '" id="quiz-a">' + item.a + '</div>';
+  const known = Object.values(marks).filter(v => v === 'known').length;
+  document.getElementById('quiz-progress').textContent =
+    'Card ' + (qIdx + 1) + ' / ' + QUIZ.length + '  ·  ' + known + ' known';
+}
+function quizReveal() { qRevealed = true; renderQuiz(); }
+function quizNext() { qIdx = (qIdx + 1) % QUIZ.length; qRevealed = false; renderQuiz(); resetTimer(); }
+function quizMark(kind) { const m = loadMarks(); m[qIdx] = kind; saveMarks(m); quizNext(); }
+
+function quizTimer() {
+  if (qTimerId) { resetTimer(); return; }
+  const el = document.getElementById('quiz-timer');
+  el.style.display = 'inline-block';
+  document.getElementById('quiz-timer-btn').textContent = '⏱ Stop timer';
+  qTimerId = setInterval(() => {
+    qLeft--;
+    const mm = Math.floor(qLeft / 60), ss = String(qLeft % 60).padStart(2, '0');
+    el.textContent = mm + ':' + ss;
+    el.classList.toggle('low', qLeft <= 20);
+    if (qLeft <= 0) { resetTimer(); el.textContent = 'Time!'; el.style.display = 'inline-block'; }
+  }, 1000);
+}
+function resetTimer() {
+  if (qTimerId) { clearInterval(qTimerId); qTimerId = null; }
+  qLeft = 120;
+  const el = document.getElementById('quiz-timer');
+  el.style.display = 'none'; el.classList.remove('low'); el.textContent = '2:00';
+  document.getElementById('quiz-timer-btn').textContent = '⏱ Start 2-min timer';
+}
+
+document.addEventListener('DOMContentLoaded', () => { initCmdPalette({ guide: GUIDE, mount: '#cmd-ref-root' }); initProgress(); renderQuiz(); initAskClaude({ guide: GUIDE }); initProgressView({ guide: GUIDE, mount: '#prog-root' }); });
+</script>
+</body>
+</html>
