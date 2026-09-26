@@ -87,6 +87,7 @@
       });
     });
     if (typeof window.updateBadges === 'function') window.updateBadges();
+    if (typeof window.refreshDoneMarks === 'function') window.refreshDoneMarks();
   }
 
   /* ------------------------------------------------------------ gathering */

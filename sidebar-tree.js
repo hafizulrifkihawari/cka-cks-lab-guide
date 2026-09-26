@@ -19,6 +19,43 @@
     return 'tree-' + (base || 'section') + '-' + idx;
   }
 
+  /* Reads the same progress store the inline checkbox code writes to, so a
+     submenu row can show whether its heading has already been ticked
+     "Got it" / "done". Each host page defines its own `loadProg()` — a
+     top-level `function` declaration, so (unlike its `const GUIDE`/`PKEY`,
+     which stay purely lexical) it really does land on `window` and reads
+     the right localStorage key for that page. The lab tutorial namespaces
+     its keys with 'lab:' (see guideProgKey in link-guides.js) — check both
+     forms rather than depend on reading that page's own `SIDE` const. */
+  function readProg() {
+    if (typeof window.loadProg === 'function') {
+      try { return window.loadProg() || {}; } catch (e) { return {}; }
+    }
+    return {};
+  }
+
+  function isDone(sectionId, heading) {
+    var prog = readProg();
+    var plain = sectionId + '::' + heading;
+    return !!(prog[plain] || prog['lab:' + plain]);
+  }
+
+  // Painted inline (not via a CSS class) so the color always shows up,
+  // regardless of what the host page's stylesheet does with .nav-subitem.
+  function paintDot(dot, done) {
+    dot.style.background = done ? '#22c55e' : '#ef4444';
+    dot.title = done ? 'Marked “Got it”' : 'Not marked done yet';
+  }
+
+  function refreshDoneMarks() {
+    document.querySelectorAll('.nav-subitem').forEach(function (row) {
+      var dot = row.querySelector('.nav-subitem-dot');
+      if (!dot) return;
+      paintDot(dot, isDone(row.getAttribute('data-sec-id'), row.getAttribute('data-heading')));
+    });
+  }
+  window.refreshDoneMarks = refreshDoneMarks;
+
   function directHeadings(section) {
     var all = [];
     for (var i = 0; i < section.children.length; i++) {
@@ -48,14 +85,28 @@
 
     heads.forEach(function (h, i) {
       if (!h.id) h.id = slugify(h.textContent, i);
+      var headingText = h.textContent.trim();
       var row = document.createElement('div');
       row.className = 'nav-subitem';
-      row.textContent = h.textContent;
+      row.setAttribute('data-sec-id', section.id);
+      row.setAttribute('data-heading', headingText);
+
+      var dot = document.createElement('span');
+      dot.className = 'nav-subitem-dot';
+      paintDot(dot, isDone(section.id, headingText));
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode(h.textContent));
+
       row.addEventListener('click', function (e) {
         e.stopPropagation();
         show(m[1]);
-        var target = document.getElementById(h.id);
-        if (target) target.scrollIntoView({ block: 'start' });
+        // show() swaps which .section is visible; give the browser a beat
+        // to lay that out before scrolling, or scrollIntoView measures the
+        // wrong (still-hidden) position and lands on the top of the page.
+        setTimeout(function () {
+          var target = document.getElementById(h.id);
+          if (target) target.scrollIntoView({ block: 'start' });
+        }, 40);
       });
       sub.appendChild(row);
     });
@@ -63,9 +114,18 @@
     var toggle = document.createElement('span');
     toggle.className = 'nav-toggle';
     toggle.textContent = '▸'; // ▸
+    toggle.title = 'Expand section list';
     toggle.setAttribute('aria-label', 'Expand section list');
     toggle.addEventListener('click', function (e) {
       e.stopPropagation();
+      navItem.classList.toggle('nav-expanded');
+    });
+
+    // The arrow is a small hit target — a double-click anywhere on the row
+    // also expands/collapses, so people don't have to aim for it.
+    navItem.title = 'Double-click to expand the section list';
+    navItem.addEventListener('dblclick', function (e) {
+      e.preventDefault();
       navItem.classList.toggle('nav-expanded');
     });
 
@@ -73,8 +133,32 @@
     navItem.insertAdjacentElement('afterend', sub);
   }
 
+  function injectStyles() {
+    var st = document.createElement('style');
+    st.textContent =
+      /* The topbar is position:sticky, so a plain scrollIntoView lands the
+         heading right under it (partly hidden). scroll-margin-top makes the
+         browser stop short and leave room for it. Covers the My Progress
+         page's own jump-to-heading too, since it targets .h2wrap/.h3wrap. */
+      '.section h2,.section h3,.h2wrap,.h3wrap{scroll-margin-top:76px;}' +
+      '.nav-subitem{display:flex;align-items:flex-start;gap:9px;}' +
+      '.nav-subitem-dot{width:9px;height:9px;min-width:9px;border-radius:50%;margin-top:5px;' +
+        'box-shadow:0 0 0 2px rgba(255,255,255,.08);}' +
+      '.nav-toggle{font-size:15px;line-height:1;padding:5px 9px;margin-left:auto;border-radius:6px;' +
+        'color:rgba(255,255,255,.55);}' +
+      '.nav-toggle:hover{background:rgba(255,255,255,.14);color:#fff;}' +
+      '.nav-item.nav-expanded .nav-toggle{color:#fff;}' +
+      '.sb-group[data-tree] .nav-item{user-select:none;}';
+    document.head.appendChild(st);
+  }
+
   function init() {
+    injectStyles();
     document.querySelectorAll('.sb-group[data-tree] .nav-item').forEach(buildSubmenu);
+    // Any checkpoint toggle anywhere in the guide updates the submenu marks.
+    document.addEventListener('change', function (e) {
+      if (e.target && e.target.classList && e.target.classList.contains('pchk')) refreshDoneMarks();
+    });
   }
 
   document.addEventListener('DOMContentLoaded', init);
