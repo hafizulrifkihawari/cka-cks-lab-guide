@@ -10,8 +10,14 @@ if [ -z "$CP_IP" ]; then
   exit 1
 fi
 
-echo "==> kubeadm init (advertise $CP_IP)"
-kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address="$CP_IP"
+# A second run keeps the cluster from the first one: kubeadm init fails on a node that has one.
+# To start again, run 'sudo kubeadm reset -f' first.
+if [ -f /etc/kubernetes/admin.conf ]; then
+  echo "==> kubeadm init already ran on this node, skipping it"
+else
+  echo "==> kubeadm init (advertise $CP_IP)"
+  kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address="$CP_IP"
+fi
 
 echo "==> Configure kubectl for the login user"
 USER_HOME=$(getent passwd "${SUDO_USER:-root}" | cut -d: -f6)

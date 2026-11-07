@@ -236,11 +236,13 @@
 
   function commitActive(keepOpen) {
     if (activeIndex < 0 || !flatResults[activeIndex]) return;
-    const item = flatResults[activeIndex];
+    // The copy is async: the active row can move before it ends.
+    const idx = activeIndex;
+    const item = flatResults[idx];
     copyText(item.c.cmd).then(function () {
       addRecent(item.c);
       if (keepOpen) {
-        const flash = resultsEl.querySelector('.cmdp-flash[data-flash="' + activeIndex + '"]');
+        const flash = resultsEl.querySelector('.cmdp-flash[data-flash="' + idx + '"]');
         if (flash) {
           flash.textContent = ' ✓ copied';
           setTimeout(function () { flash.textContent = ''; }, 1000);
@@ -269,7 +271,8 @@
         if (!editable) { e.preventDefault(); openPopup(); }
         return;
       }
-      if (popupOpen && e.key === 'Escape') { closePopup(); }
+      // preventDefault tells the Ask Claude panel that this Escape is used.
+      if (popupOpen && e.key === 'Escape') { e.preventDefault(); closePopup(); }
     });
   }
 

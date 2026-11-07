@@ -55,8 +55,9 @@
     try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
   }
 
+  // Runs on each load, so a rename added to RENAMES later also moves its tick.
+  // It is cheap and safe to repeat: a key moves only when the old key exists.
   function migrate() {
-    try { if (localStorage.getItem(MKEY)) return; } catch (e) { return; }
     var map = RENAMES[CFG.guide];
     if (map) {
       var prog = load(PKEY);
@@ -156,12 +157,16 @@
 
   function quizStats() {
     var marks = load(QKEY);
+    var quiz = window.QUIZ || [];
     var known = 0, review = 0;
-    Object.keys(marks).forEach(function (k) {
-      if (marks[k] === 'known') known++;
-      else if (marks[k] === 'review') review++;
+    // Count only cards that still exist. A mark is keyed by the question text
+    // (or, before the move, by the card position).
+    quiz.forEach(function (card, i) {
+      var v = marks[card.q] || marks[String(i)];
+      if (v === 'known') known++;
+      else if (v === 'review') review++;
     });
-    var total = (window.QUIZ && window.QUIZ.length) ? window.QUIZ.length : 0;
+    var total = quiz.length;
     return { known: known, review: review, total: total };
   }
 

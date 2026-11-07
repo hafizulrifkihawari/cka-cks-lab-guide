@@ -165,6 +165,9 @@
       setStatus('Key cleared.');
     });
     panelEl.querySelector('#askc-reset').addEventListener('click', function () {
+      // Stop a running answer first. Its message leaves the list, so it cannot write
+      // into the new, empty history (see current()).
+      stop();
       history = []; listEl.innerHTML = ''; greet(); setStatus('');
     });
 
@@ -193,7 +196,8 @@
     hlIn.addEventListener('change', function () { settings.highlight = hlIn.checked; saveSettings(); });
 
     inputEl.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+      // Enter sends. It does not stop a running answer: the Stop button does that.
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!busy) send(); }
     });
   }
 
@@ -247,7 +251,8 @@
       if ((e.key === 'j' || e.key === 'J') && (e.metaKey || e.ctrlKey)) {
         e.preventDefault(); togglePanel(); return;
       }
-      if (e.key === 'Escape' && panelEl.classList.contains('open')) {
+      // The command palette closes first when it handles the same Escape.
+      if (e.key === 'Escape' && !e.defaultPrevented && panelEl.classList.contains('open')) {
         if (!chipEl.hidden) { hideChip(); return; }
         closePanel();
       }
@@ -479,7 +484,7 @@
       }
       return readStream(res, out);
     }).catch(function (err) {
-      if (err && err.name === 'AbortError') { dropDanglingUser(); finish(out, 'Stopped.'); return; }
+      if (err && err.name === 'AbortError') { dropDanglingUser(out); finish(out, 'Stopped.'); return; }
       fail(out, err);
     });
   }
@@ -521,16 +526,26 @@
     return pump();
   }
 
+  // False when "Clear conversation" removed this answer's message: the answer
+  // belongs to a thread that is gone.
+  function current(out) {
+    return listEl.contains(out);
+  }
+
   function commit(out, acc) {
+    if (!current(out)) return;
     if (acc) history.push({ role: 'assistant', text: acc });
-    else out.innerHTML = md('_Empty response._');
-    // Keep the thread short so requests stay cheap and fast.
+    else { out.innerHTML = md('_Empty response._'); dropDanglingUser(out); }
+    // Keep the thread short so requests stay cheap and fast. It must start
+    // with a user turn.
     if (history.length > 12) history = history.slice(-12);
+    while (history.length && history[0].role !== 'user') history.shift();
   }
 
   // The API needs alternating roles. A failed or stopped turn must not leave
   // a user message with no reply after it, or the next send is rejected.
-  function dropDanglingUser() {
+  function dropDanglingUser(out) {
+    if (!current(out)) return;
     if (history.length && history[history.length - 1].role === 'user') history.pop();
   }
 
@@ -567,7 +582,7 @@
         'Then open `http://localhost:8000/' + CFG.guide + '-study-guide.html`.\n\n' +
         'Or switch to **Open in claude.ai** in ⚙ — that needs no key and no server.'
       : msg;
-    dropDanglingUser();
+    dropDanglingUser(out);
     out.classList.remove('askc-wait');
     out.innerHTML = md(body);
     out.classList.add('askc-err');

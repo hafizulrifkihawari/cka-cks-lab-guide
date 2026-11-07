@@ -68,6 +68,7 @@
 
   function initGuideLinks(opts) {
     CFG = Object.assign({ side: 'theory' }, opts || {});
+    window.guideSide = CFG.side;
     injectStyles();
     if (CFG.side === 'lab') {
       publishManifest();

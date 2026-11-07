@@ -1602,7 +1602,7 @@ function show(id) {
 /* ---------- PROGRESS TRACKING ---------- */
 const PKEY = GUIDE + '-progress';
 function loadProg() { try { return JSON.parse(localStorage.getItem(PKEY)) || {}; } catch (e) { return {}; } }
-function saveProg(p) { localStorage.setItem(PKEY, JSON.stringify(p)); }
+function saveProg(p) { try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch (e) {} }
 
 function initProgress() {
   const prog = loadProg();
@@ -1652,12 +1652,16 @@ function updateBadges() {
 
 function resetProgress() {
   if (!confirm('Clear all progress and quiz marks on this device?')) return;
-  localStorage.removeItem(PKEY);
-  localStorage.removeItem(GUIDE + '-quiz');
-  localStorage.removeItem(GUIDE + '-cmd-recent');
+  try {
+    localStorage.removeItem(PKEY);
+    localStorage.removeItem(GUIDE + '-quiz');
+    localStorage.removeItem(GUIDE + '-cmd-recent');
+  } catch (e) {}
   document.querySelectorAll('.pchk').forEach(cb => { cb.checked = false; });
   document.querySelectorAll('.h2wrap.done').forEach(w => w.classList.remove('done'));
+  qIdx = 0; qRevealed = false; resetTimer();
   updateBadges(); renderQuiz();
+  if (typeof window.renderProgressView === 'function') window.renderProgressView();
 }
 
 /* ---------- SELF-QUIZ ---------- */
@@ -1687,28 +1691,43 @@ const QUIZ = [
 window.QUIZ = QUIZ;
 let qIdx = 0, qRevealed = false, qTimerId = null, qLeft = 120;
 
-function loadMarks() { try { return JSON.parse(localStorage.getItem(GUIDE + '-quiz')) || {}; } catch (e) { return {}; } }
-function saveMarks(m) { localStorage.setItem(GUIDE + '-quiz', JSON.stringify(m)); }
+// Marks are keyed by the question text, so adding or moving a card keeps each mark on its card.
+// Old marks were keyed by the card's position: move them once to the question text.
+function loadMarks() {
+  let m;
+  try { m = JSON.parse(localStorage.getItem(GUIDE + '-quiz')) || {}; } catch (e) { return {}; }
+  let moved = false;
+  Object.keys(m).forEach((k) => {
+    if (!/^\d+$/.test(k)) return;
+    const card = QUIZ[Number(k)];
+    if (card && !(card.q in m)) m[card.q] = m[k];
+    delete m[k];
+    moved = true;
+  });
+  if (moved) saveMarks(m);
+  return m;
+}
+function saveMarks(m) { try { localStorage.setItem(GUIDE + '-quiz', JSON.stringify(m)); } catch (e) {} }
 
 function renderQuiz() {
   const card = document.getElementById('quiz-card');
   if (!card) return;
   const item = QUIZ[qIdx];
   const marks = loadMarks();
-  const mark = marks[qIdx];
+  const mark = marks[item.q];
   const badge = mark === 'known' ? '<span class="quiz-known k">✓ Known</span>'
               : mark === 'review' ? '<span class="quiz-known r">↻ Review</span>' : '';
   card.innerHTML =
     '<div class="quiz-cat">' + item.cat + ' ' + badge + '</div>' +
     '<div class="quiz-q">' + item.q + '</div>' +
     '<div class="quiz-a' + (qRevealed ? '' : ' hidden') + '" id="quiz-a">' + item.a + '</div>';
-  const known = Object.values(marks).filter(v => v === 'known').length;
+  const known = QUIZ.filter((c) => marks[c.q] === 'known').length;
   document.getElementById('quiz-progress').textContent =
     'Card ' + (qIdx + 1) + ' / ' + QUIZ.length + '  ·  ' + known + ' known';
 }
 function quizReveal() { qRevealed = true; renderQuiz(); }
 function quizNext() { qIdx = (qIdx + 1) % QUIZ.length; qRevealed = false; renderQuiz(); resetTimer(); }
-function quizMark(kind) { const m = loadMarks(); m[qIdx] = kind; saveMarks(m); quizNext(); }
+function quizMark(kind) { const m = loadMarks(); m[QUIZ[qIdx].q] = kind; saveMarks(m); quizNext(); }
 
 function quizTimer() {
   if (qTimerId) { resetTimer(); return; }

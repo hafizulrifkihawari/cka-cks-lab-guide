@@ -34,10 +34,17 @@
     return {};
   }
 
+  // Read only this page's own key. A study heading and a lab step can share a
+  // section id and a heading text, and a tick on one must not mark the other.
+  function onLabPage() {
+    if (window.guideSide) return window.guideSide === 'lab';
+    return /lab-tutorial/.test(location.pathname);
+  }
+
   function isDone(sectionId, heading) {
     var prog = readProg();
     var plain = sectionId + '::' + heading;
-    return !!(prog[plain] || prog['lab:' + plain]);
+    return !!prog[(onLabPage() ? 'lab:' : '') + plain];
   }
 
   // Painted inline (not via a CSS class) so the color always shows up,
